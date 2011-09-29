@@ -1,0 +1,82 @@
+{znamenka} 0|1|2|3|4|5|6|7|8|9
+{hexZnamenka} {znamenka}|a|b|c|d|e|f|A|B|C|D|E|F
+{broj} {znamenka}{znamenka}*|0x{hexZnamenka}{hexZnamenka}*
+{bjelina} \t|\n|\_
+{sviZnakovi} \(|\)|\{|\}|\||\*|\\|\$|\t|\n|\_|!|"|#|%|&|'|+|,|-|.|/|0|1|2|3|4|5|6|7|8|9|:|;|<|=|>|?|@|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|[|]|^|_|`|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|~
+%X S_pocetno S_komentar S_unarni
+%L OPERAND OP_MINUS UMINUS LIJEVA_ZAGRADA DESNA_ZAGRADA
+<S_pocetno>\t|\_
+{
+-
+}
+<S_pocetno>\n
+{
+-
+NOVI_REDAK
+}
+<S_pocetno>#\|
+{
+-
+UDJI_U_STANJE S_komentar
+}
+<S_komentar>\|#
+{
+-
+UDJI_U_STANJE S_pocetno
+}
+<S_komentar>\n
+{
+-
+NOVI_REDAK
+}
+<S_komentar>{sviZnakovi}
+{
+-
+}
+<S_pocetno>{broj}
+{
+OPERAND
+}
+<S_pocetno>\(
+{
+LIJEVA_ZAGRADA
+}
+<S_pocetno>\)
+{
+DESNA_ZAGRADA
+}
+<S_pocetno>-
+{
+OP_MINUS
+}
+<S_pocetno>-{bjelina}*-
+{
+OP_MINUS
+UDJI_U_STANJE S_unarni
+VRATI_SE 1
+}
+<S_pocetno>\({bjelina}*-
+{
+LIJEVA_ZAGRADA
+UDJI_U_STANJE S_unarni
+VRATI_SE 1
+}
+<S_unarni>\t|\_
+{
+-
+}
+<S_unarni>\n
+{
+-
+NOVI_REDAK
+}
+<S_unarni>-
+{
+UMINUS
+UDJI_U_STANJE S_pocetno
+}
+<S_unarni>-{bjelina}*-
+{
+UMINUS
+VRATI_SE 1
+}

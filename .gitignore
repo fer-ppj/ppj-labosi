@@ -1,4 +1,5 @@
 *.aux
+*.bat
 *.bbl
 *.blg
 *.dvi
@@ -13,6 +14,9 @@
 *.lof
 *.log
 *.lot
+*.maf
+*.mtc
+*.mtc0
 *.nav
 *.nlo
 *.out
@@ -22,6 +26,3 @@
 *.synctex.gz
 *.toc
 *.vrb
-*.maf
-*.mtc
-*.mtc0
