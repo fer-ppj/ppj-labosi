@@ -1,0 +1,250 @@
+01	0036454472	Damir	Begiæ	damir.begic@fer.hr
+01	0036452964	Vedran	Džaja	vedran.dzaja@fer.hr
+01	0036450239	Ivan	Pilat	ivan.pilat@fer.hr
+01	0036452686	Borna	Belobrajdiæ	borna.belobrajdic@fer.hr
+01	0036441974	Marin	Vuica	marin.vuica@fer.hr
+01	0036435452	Dario	Radiæ	dario.radic@fer.hr
+
+02	0036450270	Matija	Derk	matija.derk@fer.hr
+02	0036423951	Martina	Zelenika	martina.zelenika@fer.hr
+02	0036452441	Joel Mislav	Kunst	joel-mislav.kunst@fer.hr
+02	0036447413	Branimir	Petrušiæ	branimir.petrusic@fer.hr
+02	0036447658	Mate	Antièeviæ	mate.anticevic@fer.hr
+02	0036451652	Damir	Šehiæ	damir.sehic@fer.hr
+
+03	0036449444	Maja	Kontrec	maja.kontrec@fer.hr
+03	1194020160	Davor	Ivanuš	davor.ivanus@fer.hr
+03	0036452532	Marko	Ðuraseviæ	marko.durasevic@fer.hr
+03	0036452366	Martina	Marenci	martina.marenci@fer.hr
+03	0036447892	Rade	Bebek	rade.bebek@fer.hr
+03	0036449813	Maja	Kurjan	maja.kurjan@fer.hr
+
+04	0036448746	Matea	Ðonliæ	matea.donlic@fer.hr
+04	0036446281	Damir	Svrtan	damir.svrtan@fer.hr
+04	0036452100	David	Tomiæ	david.tomic2@fer.hr
+04	0036447707	Alen	Živoliæ	alen.zivolic@fer.hr
+04	0036452184	Jure	Kvartuè	jure.kvartuc@fer.hr
+04	0036456713	Matija	Sekuliæ	matija.sekulic@fer.hr
+
+05	0036451007	Anðelo	Škibola	andelo.skibola@fer.hr
+05	0036455560	Ivan	Ficko	ivan.ficko@fer.hr
+05	0036448340	Ana	Stepiæ	ana.bartulovic@fer.hr
+05	0036457128	Emanuel	Vukeliæ	emanuel.vukelic@fer.hr
+05	0036449764	Vjekoslav	Giacometti	vjekoslav.giacometti@fer.hr
+05	0036450447	Andrija	Stepiæ	andrija.stepic@fer.hr
+
+06	0036450195	Petar	Matkoviæ	petar.matkovic@fer.hr
+06	0036453267	Mak	Krnic	mak.krnic@fer.hr
+06	0036453428	Ivan	Slijepèeviæ	ivan.slijepcevic@fer.hr
+06	0036453753	Sara	Stamenov	sara.stamenov@fer.hr
+06	0036453001	Goran	Hrženjak	goran.hrzenjak@fer.hr
+06	0036454404	Zoran	Crljenica	zoran.crljenica@fer.hr
+
+07	0036450174	Jerko	Jurin	jerko.jurin@fer.hr
+07	0036449327	Slaven	Mišak	slaven.misak@fer.hr
+07	0036452810	Marko	Iviæ	marko.ivic@fer.hr
+07	0036448772	Dino	Milaèiæ	dino.milacic@fer.hr
+07	0036437691	Mladen	Kukuliæ	mladen.kukulic@fer.hr
+07	0036449951	Mirela	Æosiæ	mirela.cosic@fer.hr
+
+08	0036451103	Matija	Bagiæ	matija.bagic@fer.hr
+08	0036451988	Josip	Užareviæ	josip.uzarevic@fer.hr
+08	0036452506	Jakov	Kanaet	jakov.kanaet@fer.hr
+08	0036454243	Ivan	Vranjiæ	ivan.vranjic@fer.hr
+08	0036452483	Martin	Šošiæ	martin.sosic@fer.hr
+08	0036461848	Marin	Krmpotiæ	marin.krmpotic@fer.hr
+
+09	0036452179	Mateja	Škrapec	mateja.skrapec@fer.hr
+09	0036450788	Damir	Širola	damir.sirola@fer.hr
+09	0036434198	Daniel	Jakoliæ	daniel.jakolic@fer.hr
+09	0036440293	Goran	Kovaèeviæ	goran.kovacevic@fer.hr
+09	0036460013	Josip	Bagariæ	josip.bagaric2@fer.hr
+09	0036449556	Petra	Almiæ	petra.almic@fer.hr
+
+10	0036453288	Igor	Smolkoviè	igor.smolkovic@fer.hr
+10	0036453300	Dino	Šantl	dino.santl@fer.hr
+10	0036448697	Anja	Hula	anja.hula@fer.hr
+10	0036448447	Andreja	Smetko	andreja.smetko@fer.hr
+10	0036452457	Petra	Vuèkoviæ	petra.vuckovic@fer.hr
+10	0036450083	Filip	Beæ	filip.bec@fer.hr
+
+11	0036454201	Slavko	Grahovac	slavko.grahovac@fer.hr
+11	0036450020	Zvonimir	Iliæ	zvonimir.ilic@fer.hr
+11	0036451790	Leon	Ostrež	leon.ostrez@fer.hr
+11	0036451283	Mario	Glavak	mario.glavak@fer.hr
+11	0036454035	Zvonimir	Sabljiæ	zvonimir.sabljic@fer.hr
+11	0036452212	Dominik	Poljak	dominik.poljak@fer.hr
+
+12	0036452067	Željko	Tadiæ	zeljko.tadic@fer.hr
+12	0036450884	Mia	Primorac	mia.primorac@fer.hr
+12	0036452798	Tanja	Kojiæ	tanja.kojic@fer.hr
+12	0036452782	Ines	Akrap	ines.akrap@fer.hr
+12	0036449514	Antun	Novosel	antun.novosel@fer.hr
+12	0036447780	Danijel	Temraz	danijel.temraz@fer.hr
+
+13	0036459687	Andrea	Radniæ	andrea.radnic@fer.hr
+13	0036449374	Domagoj	Šalkoviæ	domagoj.salkovic@fer.hr
+13	0036450697	Goran	Žužiæ	goran.zuzic@fer.hr
+13	0246019418	Diana	Musa	diana.musa@fer.hr
+13	0036458653	Krešimir	Kuren	kresimir.kuren@fer.hr
+13	0036455027	Igor	Jerkoviæ	igor.jerkovic@fer.hr
+
+14	0036453412	Filip	Mamiæ	filip.mamic@fer.hr
+14	0036458216	Ivan	Validžiæ	ivan.validzic@fer.hr
+14	0036451332	Matej	Mikleèiæ	matej.miklecic@fer.hr
+14	0119004546	Mario	Rudman	mario.rudman@fer.hr
+14	0246022847	Marko	Radoš	marko.rados@fer.hr
+14	0036454719	Josip	Bogdan	josip.bogdan@fer.hr
+
+15	0036454355	Goran	Gašiæ	goran.gasic@fer.hr
+15	0036451626	Josip	Janžiæ	josip.janzic@fer.hr
+15	0036458060	Mihael	Preseèan	mihael.presecan@fer.hr
+15	0036437296	Tibor	Ibrišimoviæ	tibor.ibrisimovic@fer.hr
+15	0036446624	Kristina	Barišiæ	kristina.barisic@fer.hr
+15	0036440802	Nikola	Medakoviæ	nikola.medakovic@fer.hr
+
+16	0036449348	Leo	Zuanoviæ	leo.zuanovic@fer.hr
+16	0036456339	Josip	Miliæ	josip.milic@fer.hr
+16	0036457908	Martin	Ðakoviæ	martin.dakovic@fer.hr
+16	0036428206	Mihael	Grilec	mihael.grilec@fer.hr
+16	0036451668	Maja	Buljan	maja.buljan@fer.hr
+16	1191208094	Vanja	Božiæ	vanja.bozic@fer.hr
+
+17	0036452499	Matija	Šošiæ	matija.sosic@fer.hr
+17	0036449124	Mislav	Novakoviæ	mislav.novakovic@fer.hr
+17	0036450111	Matija	Stepaniæ	matija.stepanic@fer.hr
+17	0036441451	Marija	Srbljiæ	marija.srbljic@fer.hr
+17	0036453699	Mario	Magdiæ	mario.magdic@fer.hr
+17	0036451096	Drago	Crnjac	drago.crnjac@fer.hr
+
+18	0036446031	Vedrana	Èoliæ	vedrana.colic@fer.hr
+18	0036449988	Izabela	Bratoviæ	izabela.bratovic@fer.hr
+18	0036461463	Irena	Oršoliæ	irena.orsolic@fer.hr
+18	0036454696	Ivana	Balaževiæ	ivana.balazevic@fer.hr
+18	0036455513	Dario	Pevec	dario.pevec@fer.hr
+18	0036442170	Dominik	Julariæ	dominik.jularic@fer.hr
+
+19	0036450148	Frano	Perleta	frano.perleta@fer.hr
+19	0036448410	Mihaela	Pejèinoviæ	mihaela.pejcinovic@fer.hr
+19	0036450489	Dario	Peniæ	dario.penic@fer.hr
+19	0036429726	Martina	Bajza	martina.bajza@fer.hr
+19	0036459619	Mate	Nenadiæ	mate.nenadic@fer.hr
+19	0036458466	Kristijan	Car	kristijan.car@fer.hr
+
+20	0036451402	Dino	Medvidoviæ	dino.medvidovic@fer.hr
+20	0036454040	Jurica	Skorin	jurica.skorin@fer.hr
+20	0036454397	Goran	Vladika	goran.vladika@fer.hr
+20	0036450746	Nikola	Jagodin	nikola.jagodin@fer.hr
+20	0036452777	Kristijan	Ivanèiæ	kristijan.ivancic@fer.hr
+20	0036435062	Lovro	Vrlec	lovro.vrlec@fer.hr
+
+21	0036451278	Martin	Tutek	martin.tutek@fer.hr
+21	0036454948	Tomislav	Ðurièiæ	tomislav.duricic@fer.hr
+21	0036449582	Matija	Ilijaš	matija.ilijas@fer.hr
+21	0036454878	Ivo	Zrno	ivo.zrno@fer.hr
+21	0036450751	Paolo	Èeriæ	paolo.ceric@fer.hr
+21	0036453587	Janko	Sladoviæ	janko.sladovic@fer.hr
+
+22	0036451514	Ivan	Reniæ	ivan.renic@fer.hr
+22	0036448980	Tena	Dominko	tena.dominko@fer.hr
+22	0035147980	Dominik	Trupèeviæ	dominik.trupcevic@fer.hr
+22	0036453566	Daniel	Æuk	daniel.cuk@fer.hr
+22	0036436717	Filip	Svalina	filip.svalina@fer.hr
+22	0036448704	Danijel	Paviæ	danijel.pavic@fer.hr
+
+23	0036451171	Nino	Èrljenec	nino.crljenec@fer.hr
+23	0036452511	Ivan	Petrièeviæ	ivan.petricevic2@fer.hr
+23	0036449610	Jura	Škrlec	jura.skrlec@fer.hr
+23	0036454563	Petar	Aliloviæ	petar.alilovic@fer.hr
+23	0036454238	David	Pruša	david.prusa@fer.hr
+23	0036456440	Luka	Rukliæ	luka.ruklic@fer.hr
+
+24	0036453496	Josip	Šarlija	josip.sarlija@fer.hr
+24	0036447301	Ante	Karin	ante.karin@fer.hr
+24	0036453727	Goran	Jelen	goran.jelen@fer.hr
+24	0036448377	Goran	Krmpotiæ	goran.krmpotic@fer.hr
+24	0036442464	Antonio	Grabiæ	antonio.grabic@fer.hr
+24	0036451423	Vedran	Semenski	vedran.semenski@fer.hr
+
+25	0036449439	Mislav	Stankoviæ	mislav.stankovic@fer.hr
+25	0036449605	Igor	Lipovac	igor.lipovac@fer.hr
+25	0036442700	Ivan	Belfinger	ivan.belfinger@fer.hr
+25	0036451829	Mirko	Juriæ-Kavelj	mirko.juric-kavelj@fer.hr
+25	0036458989	Nikola	Milièiæ	nikola.milicic@fer.hr
+25	0036421551	Ana	Sabol	ana.sabol@fer.hr
+
+26	0036449119	Ivan	Božiæ	ivan.bozic2@fer.hr
+26	0036448356	Stjepan Antivo	Ivica	stjepan-antivo.ivica@fer.hr
+26	0036449007	Hana	Amuliæ	hana.amulic@fer.hr
+26	0036448382	Josip	Mariæ	josip.maric@fer.hr
+26	0036450398	Dario	Sikirica	dario.sikirica@fer.hr
+26	0036452761	Tomislav	Bobinac	tomislav.bobinac@fer.hr
+
+27	0036449743	Vlatka	Pavišiæ	vlatka.pavisic@fer.hr
+27	0036442240	Paulina	Hendiæ	paulina.hendic@fer.hr
+27	0036449759	Vanessa	Županoviæ	vanessa.zupanovic@fer.hr
+27	0036448928	Bruno	Rahle	bruno.rahle@fer.hr
+27	0036456963	Nino	Uzelac	nino.uzelac@fer.hr
+27	0036432055	Sandro	Fazliæ	sandro.fazlic@fer.hr
+
+28	0036454633	Šime	Gveriæ	sime.gveric@fer.hr
+28	0036452548	Domagoj	Alagiæ	domagoj.alagic@fer.hr
+28	0036462135	Nikola	Ravnjak	nikola.ravnjak@fer.hr
+28	0036454787	Nikola	Goluban	nikola.goluban@fer.hr
+28	0165040625	Andro	Radiæ	andro.radic@fer.hr
+28	0036437121	Zoran	Èavužiæ	zoran.cavuzic@fer.hr
+
+29	0036454836	Josip	Sivriæ	josip.sivric@fer.hr
+29	0036450772	Toni	Mofardin	toni.mofardin@fer.hr
+29	0036449876	Dino	Suliæ	dino.sulic@fer.hr
+29	0036452852	Toni	Budroviæ	toni.budrovic@fer.hr
+29	0036385615	Goran	Juriæ	goran.juric@fer.hr
+29	0036450265	Matija	Delaè	matija.delac@fer.hr
+
+30	0036453706	Ivona	Haban	ivona.haban@fer.hr
+30	0036451689	Nikola	Munðer	nikola.munder@fer.hr
+30	0036450501	Lana	Lisjak	lana.lisjak@fer.hr
+30	0036453181	Jelena	Konfic	jelena.konfic@fer.hr
+30	0036454654	Petra	Kirin	petra.kirin@fer.hr
+30	0036454911	Ana	Vadas	ana.vadas@fer.hr
+
+31	0036454061	Bojana	Rimaniæ	bojana.rimanic@fer.hr
+31	0036449353	Ana-Maria	Antoloviæ	ana-maria.antolovic@fer.hr
+31	0036449187	Mario	Èale	mario.cale@fer.hr
+31	0036450767	Ines	Jelovac	ines.jelovac@fer.hr
+31	0036454899	Mislav	Mandariæ	mislav.mandaric@fer.hr
+31	0036449171	Mihael	Županèiæ	mihael.zupancic@fer.hr
+
+32	0036436689	Stanko	Pralas	stanko.pralas@fer.hr
+32	0036453090	Matija	Kurešiæ	matija.kuresic@fer.hr
+32	0036451262	Maja	Cvijanoviæ	maja.cvijanovic@fer.hr
+32	0036443804	Petar	Kuštro	petar.kustro@fer.hr
+32	0036460562	Ivan	Dundoviæ	ivan.dundovic@fer.hr
+32	0036453043	Matija	Martiæ	matija.martic@fer.hr
+
+33	0036452901	Marijan	Šuflaj	marijan.suflaj@fer.hr
+33	0036449561	Ivan	Vukorepa	ivan.vukorepa@fer.hr
+33	0036453998	Hrvoje	Gazibara	hrvoje.gazibara@fer.hr
+33	0036448564	Martin	Milièiæ	martin.milicic@fer.hr
+33	0036449096	Ivo	Katunariæ	ivo.katunaric@fer.hr
+33	0036450837	Franjo	Tošiæ	franjo.tosic@fer.hr
+
+34	0036450078	Dino	Joviæ	dino.jovic@fer.hr
+34	0036450863	Viktor	Braut	viktor.braut@fer.hr
+34	0036450879	Anton	Grbin	anton.grbin@fer.hr
+34	0036451951	Vedran	Momèiloviæ	vedran.momcilovic@fer.hr
+34	0036457315	Dino	Lukman	dino.lukman@fer.hr
+34	0036440134	Kristian	Macanga	kristian.macanga@fer.hr
+
+35	0036455261	Ivan	Vergot	ivan.vergot@fer.hr
+35	0036449241	Alan	Fluka	alan.fluka@fer.hr
+35	0036449652	Matejka	Ivanèiæ	matejka.ivancic@fer.hr
+35	0036449668	Marko	Vrljièak	marko.vrljicak@fer.hr
+35	0036444495	Branimir	Èulina	branimir.culina@fer.hr
+35	0036431726	Ana	Novosel	ana.novosel@fer.hr
+
+36	0036449215	Ivan	Damjanoviæ	ivan.damjanovic@fer.hr
+36	0036450335	David	Cindriæ	david.cindric@fer.hr
+36	0036450473	Ivan	Mandiæ	ivan.mandic@fer.hr
+36	0036449785	Simon	Kneževiæ	simon.knezevic@fer.hr
+36	0119007943	Ivan	Fabijaniæ	ivan.fabijanic@fer.hr
