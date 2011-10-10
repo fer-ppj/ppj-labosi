@@ -250,3 +250,4 @@ grupa		jmbag		voditelj		ime		prezime		email
 36		0036450473		0		Ivan		Mandić		ivan.mandic@fer.hr
 36		0036449785		0		Simon		Knežević		simon.knezevic@fer.hr
 36		0119007943		0		Ivan		Fabijanić		ivan.fabijanic@fer.hr
+36		0036431614		0		Josip		Spajić		josip.spajic@fer.hr
