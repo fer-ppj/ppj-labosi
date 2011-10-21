@@ -959,6 +959,40 @@ Primjer programa koji ispituje većinu leksičkih zahtjeva ovog podskupa jezika 
 Leksički analizator bi trebao javiti tri greške u retku 27 i odbaciti sva tri apostrofa (jednog po jednog) u postupku oporavka od pogreške\footnote{Kao što je prije spomenuto, pripazite da leksički analizator ne ispisuje \textbf{ništa} na standardni izlaz osim traženog ispisa - greške ispisujte npr.~na \texttt{stderr}.}.
 Očekivani izlaz za dani primjer prikazan je \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/simple_primjer_izlaz.txt}{ovdje}.
 
+\chapter{Druga laboratorijska vježba}\label{chap:II}
+
+Tema druge laboratorijske vježbe je sintaksna analiza.
+Grupe izrađuju generator sintaksnog analizatora po uzoru na program Yacc, ali u bitno pojednostavljenom obliku.
+Generirani sintaksni analizator za parser će koristiti LR(1) kanonski parser opisan u udžbeniku od stranice 147.
+Iako se u praksi zbog velikog broja stanja LR(1) parsera često preferira korištenje LALR parsera, kanonski LR(1) parser odabran je s ciljem pojednostavljenja generatora kojeg treba izgraditi.
+Slično prvoj vježbi, izgrađenim generatorom sintaksnog analizatora će se uz odgovarajuću ulaznu datoteku generirati sintaksni analizator za podskup jezika C.
+Generirani sintaksni analizator spojit će se sa leksičkim analizatorom iz prve vježbe u jedinstvenu cjelinu koja će predstavljati početak cjelovitog kompilatora za zadani podskup jezika C.
+U nastavku je opisano kako generator sintaksnog analizatora i generirani sintaksni analizator trebaju raditi, dani su savjeti za implementaciju te je navedeno što grupe trebaju donijeti na drugu predaju laboratorijskih vježbi.
+Ova uputa pretpostavlja da je čitatelj upoznat sa ispredavanim gradivom o sintaksnoj analizi.
+Prije odlučivanja o implementacijskim detaljima treba pročitati cijelu uputu.
+
+\section{Generator sintaksnog analizatora}
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=0.7\textwidth]{slike/generator-sintaksnog-analizatora.jpg}
+\caption{Način rada generatora sintaksnog analizatora.}
+\label{fig:generator-sintaksnog-analizatora}
+\end{figure}
+
+Način rada generatora sintaksnog analizatora analogan je načinu rada generatora leksičkog analizatora iz prve vježbe i prikazan je na Slici 1. Generator sintaksnog analizatora kojeg je potrebno ostvariti treba prihvaćati opis procesa sintaksnog analizatora zadan tekstualnom datotekom (dalje Ulazna Datoteka). Izlaz iz generatora sintaksnog analizatora treba biti izvorni kod sintaksnog analizatora napisan u jeziku izgradnje (koji je proizvoljan). Ulazna Datoteka bit će zadana u sljedećem formatu: 
+
+\begin{description}
+\itemsep 1pt
+\item \%V nezavršni znakovi gramatike
+\item \%T završni znakovi gramatike
+\item \%Syn sinkronizacijski završni znakovi
+\item \emph{produkcije gramatike}
+\end{description}
+
+U nastavku je objašnjeno kako pojedini dio datoteke treba izgledati. Zbog jednostavnosti implementacije, generator sintaksnog analizatora može pretpostaviti da je Ulazna Datoteka ispravno zadana u skladu s pravilima opisanim u ovom dokumentu.
+
+
 \newpage
 \addcontentsline{toc}{chapter}{Literatura}
 \begin{thebibliography}{10}
