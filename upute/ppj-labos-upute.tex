@@ -296,6 +296,8 @@ Pojedine akcije imat će jedan do tri posebna argumenta koji redom omogućuju br
 
 Prvi posebni argument je \verb|NOVI_REDAK| što označava leksičkom analizatoru da je u izvornoj datoteci programa koji se prevodi došlo do promjene retka.
 Retci se broje kako bi jezični procesor mogao ispisivati korisne podatke o mjestu pogreške, i tijekom leksičke analize i tijekom ostalih faza rada.
+Povećani broj retka odnosi se tek na sljedeću leksičku jedinku, tj.~ako akcija prepoznaje neku leksičku jedinku (u prvom retku argumenata akcije nalazi se neko ime leksičke jedinke, a ne znak \(-\)) i ima argument \verb|NOVI_REDAK|, za broj retka te leksičke jedinke zapisuje se stari broj retka, prije uvećanja.
+
 Drugi posebni argument je \verb|UDJI_U_STANJE| \emph{imeStanja} kojim leksički analizator prelazi iz trenutnog stanja u stanje \emph{imeStanja}.
 Niz znakova \emph{imeStanja} bit će odvojen od niza \verb|UDJI_U_STANJE| točno jednim razmakom.
 Treći posebni argument je \verb|VRATI_SE| \emph{naZnak} koji određuje da se od pročitanih znakova u leksičku jedinku treba grupirati prvih \emph{naZnak} znakova, a ostali znakovi vraćaju se u ulazni niz, kao da nisu ni pročitani (vidi primjer).
