@@ -130,7 +130,6 @@ grupa		jmbag		voditelj		ime		prezime		email
 19		0036448410		1		Mihaela		Pejčinović		mihaela.pejcinovic@fer.hr
 19		0036450489		0		Dario		Penić		dario.penic@fer.hr
 19		0036429726		0		Martina		Bajza		martina.bajza@fer.hr
-19		0036459619		0		Mate		Nenadić		mate.nenadic@fer.hr
 19		0036458466		0		Kristijan		Car		kristijan.car@fer.hr
 
 20		0036451402		0		Dino		Medvidović		dino.medvidovic@fer.hr
