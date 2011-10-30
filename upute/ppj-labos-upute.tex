@@ -1075,7 +1075,7 @@ Na ovaj način prikazana je gramatika (opisana BNF notacijom):
 <E> ::= e <A> f | c
 \end{lstlisting}
 
-Cjeloviti primjer Ulazne Datoteke koja opisuje gramatiku sa 100.~stranice udžbenika nalazi se \href{}{ovdje}.
+Cjeloviti primjer Ulazne Datoteke koja opisuje gramatiku sa 100.~stranice udžbenika nalazi se \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab2/gramatika100.san}{ovdje}.
 Nad zadanom gramatikom je u udžbeniku prikazan način računanja ZAPOČINJE skupova.
 Sinkronizacijski znak je odabran nasumično kako bi se zadovoljila pravila za oblik Ulazne Datoteke.
 
@@ -1226,7 +1226,7 @@ Ispis prikazuje stvoreno generativno stablo u skladu s opisom u odjeljku \ref{se
 
 \end{lstlisting}
 
-Primjer Ulazne Datoteke generatora za podskup jezika C nalazi se \href{}{ovdje}.
+Primjer Ulazne Datoteke generatora za podskup jezika C nalazi se \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab2/simplePpjLang.san}{ovdje}\footnote{Za ovaj primjer generator generira \(\varepsilon\)-NKA s 3115 stanja i DKA sa 691 stanja uz jedno \emph{Pomakni/Reduciraj} proturječje vezano uz \texttt{else} dio naredbe grananja.}.
 U ispisu \ref{lst:primjer_C_err} prikazan je ``C program'' sa sintaksnom pogreškom.
 
 \begin{lstlisting}[caption={Jednostavan C program sa sintaksnom greškom.},label=lst:primjer_C_err]
@@ -1258,9 +1258,9 @@ Kako je \verb|TOCKAZAREZ| jedan od sinkronizacijskih znakova, u postupku oporavk
 U drugom koraku postupka oporavka od pogreške sa stoga se izbacuje list stabla koji predstavlja znak \verb|OP_BIN_I| tj.~znak \verb|&| iz ulaznog programa.
 Nakon izbacivanja tog znaka, parser može prihvatiti znak \verb|TOCKAZAREZ| pa ga i prihvaća i nastavlja s radom, tj.~postupak oporavka od pogreške je bio uspješan.
 
-Očekivani ispis analizatora može se vidjeti \href{}{ovdje}.
+Očekivani ispis analizatora može se vidjeti \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab2/simplePpjLang_err.out}{ovdje}.
 
-Svi ovi kao i nekoliko složenijih primjera nalaze se u \href{}{ovoj arhivi}.
+Svi ovi kao i nekoliko složenijih primjera nalaze se u \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab2/langdefs.zip}{ovoj arhivi}.
 Za jednostavnije primjere je dana i datoteka imena \verb|*_gen.txt| koja sadrži dio kontrolnog ispisa generatora što možda može biti korisno kod uklanjanja pogrešaka pri razvoju generatora.
 U tim datotekama su navedene izračunate relacije i generirani konačni automati, a za najjednostavniji primjer i tablice LR-parsera.
 
