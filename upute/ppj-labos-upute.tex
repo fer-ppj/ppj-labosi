@@ -243,7 +243,7 @@ Na primjer, dio regularnih definicija u Ulaznoj Datoteci može izgledati ovako:
 Kao što se vidi u zadnjem retku primjera u ispisu \ref{lst:regdef}, referenca na prethodno definiranu regularnu definiciju može se nalaziti bilo gdje u regularnom izrazu.
 
 \subsection{Stanja leksičkog analizatora}
-Za pojedine klase leksičkih jedinki nužno je promatrati lijevi kontekst, tj. dio ulaznog niza koji je pročitan prije podniza koji čini leksičku jedinku.
+Za pojedine klase leksičkih jedinki nužno je promatrati lijevi kontekst, tj.~dio ulaznog niza koji je pročitan prije podniza koji čini leksičku jedinku.
 Jedan od načina praćenja lijevog konteksta koji se često koristi u leksičkim analizatorima su stanja leksičkog analizatora.
 
 Za potrebe generatora leksičkog analizatora koji se gradi u sklopu prve laboratorijske vježbe, u Ulaznoj Datoteci će nakon zadnje regularne definicije biti redak u kojem su definirana stanja koja će koristiti leksički analizator.
@@ -314,7 +314,7 @@ Specijalni znakovi koji se koriste u generatoru leksičkog analizatora su:\\
 \verb=( ) { } | * $ \=
 
 Osim ovih znakova, generator leksičkog analizatora mora u Ulaznoj Datoteci prepoznati i niz znakova \verb|\n| kao znak za novi redak i niz znakova \verb|\t| kao znak tab.
-Dodatno, razmak ćemo označavati nizom \verb|\_| (\emph{backslash underscore}) kako bi Ulazna Datoteka bila čitljivija i kako nebi bilo problema s uređivačima teksta koji brišu razmake na krajevima redaka.
+Dodatno, razmak ćemo označavati nizom \verb|\_| (\emph{backslash underscore}) kako bi Ulazna Datoteka bila čitljivija i kako ne bi bilo problema s uređivačima teksta koji brišu razmake na krajevima redaka.
 
 \subsection{Primjer}\label{sec:generator_primjer}
 U primjeru je prikazana Ulazna Datoteka jednostavanog jezika za računanje matematičkih izraza.
@@ -960,6 +960,339 @@ Točno značenje pojedinog specijalnog znaka (npr.~radi li se o binarnom ili una
 Primjer programa koji ispituje većinu leksičkih zahtjeva ovog podskupa jezika \emph{C} može se naći \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/primjer.simple}{ovdje}.
 Leksički analizator bi trebao javiti tri greške u retku 27 i odbaciti sva tri apostrofa (jednog po jednog) u postupku oporavka od pogreške\footnote{Kao što je prije spomenuto, pripazite da leksički analizator ne ispisuje \textbf{ništa} na standardni izlaz osim traženog ispisa - greške ispisujte npr.~na \texttt{stderr}.}.
 Očekivani izlaz za dani primjer prikazan je \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/simple_primjer_izlaz.txt}{ovdje}.
+
+
+
+
+\chapter{Druga laboratorijska vježba}\label{chap:II}
+
+Tema druge laboratorijske vježbe je sintaksna analiza.
+Grupe izrađuju generator sintaksnog analizatora po uzoru na program Yacc, ali u bitno pojednostavljenom obliku.
+Generirani sintaksni analizator za parser će koristiti LR(1) kanonski parser opisan u udžbeniku od stranice 147.
+Iako se u praksi zbog velikog broja stanja LR(1) parsera često preferira korištenje LALR parsera, kanonski LR(1) parser odabran je s ciljem pojednostavljenja generatora kojeg treba izgraditi.
+U nastavku je opisano kako generator sintaksnog analizatora i generirani sintaksni analizator trebaju raditi i dani su neki savjeti za implementaciju.
+Ova uputa pretpostavlja da je čitatelj upoznat sa ispredavanim gradivom o sintaksnoj analizi.
+
+\emph{Napomena}: ova vježba potpuno je neovisna od prve vježbe i možete ju raditi i ako niste uspjeli završiti prvu vježbu.
+
+\section{Generator sintaksnog analizatora}
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=0.7\textwidth]{slike/generator-sintaksnog-analizatora.jpg}
+\caption{Način rada generatora sintaksnog analizatora.}
+\label{fig:generator-sintaksnog-analizatora}
+\end{figure}
+
+Način rada generatora sintaksnog analizatora analogan je načinu rada generatora leksičkog analizatora iz prve vježbe i prikazan je na slici \ref{fig:generator-sintaksnog-analizatora}.
+Generator sintaksnog analizatora kojeg je potrebno ostvariti treba prihvaćati opis procesa sintaksnog analizatora zadan tekstualnom datotekom (dalje Ulazna Datoteka).
+Rezultat izvođenja generatora treba biti sintaksni analizator, slično kao u prvoj vježbi.
+U praksi generatori sintaksnih analizatora kao izlaz daju izvorni kod sintaksnog analizatora, ali kao i u prvoj vježbi, dozvolit ćemo da generator analizatoru potrebne podatke predaje putem datoteke ili na neki sličan način.
+Ulazna Datoteka bit će zadana u sljedećem formatu: 
+
+\begin{description}
+\itemsep 1pt
+\item \%V \emph{nezavršni znakovi gramatike}
+\item \%T \emph{završni znakovi gramatike}
+\item \%Syn \emph{sinkronizacijski završni znakovi}
+\item \emph{produkcije gramatike}
+\end{description}
+
+U nastavku je objašnjeno kako pojedini dio datoteke treba izgledati.
+Zbog jednostavnosti implementacije, generator sintaksnog analizatora može pretpostaviti da je Ulazna Datoteka ispravno zadana u skladu s pravilima opisanim u ovom dokumentu.
+
+\subsection{Nezavršni znakovi gramatike}
+
+Prvi redak Ulazne Datoteke započinje znakovima \verb|%V| i točno jednim razmakom nakon čega slijede jedan ili više nezavršnih znakova gramatike odvojeni točno jednim razmakom.
+Svaki nezavršni znak gramatike pojavit će se u ovom retku točno jednom.
+Ime nezavršnog znaka sastoji se od jednog ili više malih i velikih slova engleske abecede i znakova \verb|_| (underscore) okruženih trokutastim zagradama.
+Trokutaste zagrade su sastavni dio nezavršnog znaka i služe za jednostavno razlikovanje nezavršnih i završnih znakova.
+Prvi navedeni nezavršni znak je \textbf{početni nezavršni znak gramatike}.
+
+Na primjer, prvi redak Ulazne Datoteke može izgledati ovako:
+
+\verb|%V <Program> <Naredba> <primarni_izraz>|
+
+U prikazanom primjeru, \verb|<Program>| je početni nezavršni znak gramatike.
+
+\subsection{Završni znakovi gramatike}
+
+U drugom retku Ulazne Datoteke navedeni su završni znakovi gramatike.
+Redak počinje znakovima \verb|%T| i točno jednim razmakom nakon čega slijede jedan ili više završnih znakova gramatike odvojeni točno jednim razmakom.
+Svaki završni znak gramatike bit će naveden točno jednom.
+Završni znakovi gramatike su uniformni znakovi koje generira leksički analizator te su istog oblika kao imena uniformnih znakova.
+Drugim riječima, imena završnih znakova će se sastojati od malih i velikih slova engleske abecede i znakova \verb|_| (underscore).
+
+Na primjer, drugi redak Ulazne Datoteke može izgledati ovako:
+
+\verb|%T IDENTIFIKATOR brojcanaKonstanta znakovnaKonstanta OP_PLUS|
+
+\subsection{Sinkronizacijski završni znakovi}
+
+U trećem retku Ulazne Datoteke navedeni su sinkronizacijski završni znakovi.
+Generirani parser treba ove znakove koristiti u postupku oporavka o pogreške.
+Postupak oporavka od pogreške opisan je kasnije u odjeljku \ref{sec:syn_oporavak}.
+
+Redak započinje znakovima \verb|%Syn| i točno jednim razmakom nakon čega slijede jedan ili više završnih znakova gramatike odvojeni točno jednim razmakom.
+
+Na primjer, treći redak Ulazne Datoteke može izgledati ovako:
+
+\verb|%Syn TOCKAZAREZ ZAREZ|
+
+\subsection{Produkcije gramatike}
+U nastavku Ulazne Datoteke navedene su produkcije gramatike.
+Lijeve strane produkcije sastoje se od točno jednog nezavršnog znaka koji stoji sam u retku čiji početni znak je lijeva trokutasta zagrada nezavršnog znaka (vidi primjer).
+Nakon retka s lijevom stranom produkcije slijedi jedan ili više redaka koji započinju točno jednim znakom razmaka i predstavljaju desnu stranu produkcije.
+Desna strana svake produkcije sastoji se od jednog ili više završnih ili nezavršnih znakova odvojenih točno jednim razmakom.
+Desna strana epsilon produkcije prikazuje se retkom koji počinje znakom razmaka nakon kojeg slijedi znak \verb|$| (dolar).
+
+Na primjer, produkcije gramatike mogu izgledati ovako:
+\begin{lstlisting}[caption={Primjer produkcija gramatike.},label=lst:produkcije_gramatike_primjer]
+<A>
+ <B> <C> c
+<B>
+ $
+ b <C> <D> <E>
+<A>
+ e <D> <B>
+<C>
+ <D> a <B>
+ c a
+<D>
+ $
+ d <D>
+<E>
+ e <A> f
+ c
+\end{lstlisting}
+
+Na ovaj način prikazana je gramatika (opisana BNF notacijom):
+\begin{lstlisting}[caption={Primjer produkcija gramatike u BNF notaciji.},label=lst:produkcije_gramatike_primjer_bnf]
+<A> ::= <B> <C> c | e <D> <B>
+<B> ::= "" | b <C> <D> <E>
+<C> ::= <D> a <B> | c a
+<D> ::= "" | d <D>
+<E> ::= e <A> f | c
+\end{lstlisting}
+
+Cjeloviti primjer Ulazne Datoteke koja opisuje gramatiku sa 100.~stranice udžbenika nalazi se \href{}{ovdje}.
+Nad zadanom gramatikom je u udžbeniku prikazan način računanja ZAPOČINJE skupova.
+Sinkronizacijski znak je odabran nasumično kako bi se zadovoljila pravila za oblik Ulazne Datoteke.
+
+\subsection{Zadaci generatora sintaksnog analizatora}
+Generator sintaksnog analizatora treba pročitati Ulaznu Datoteku i izgraditi tablice Akcija i NovoStanje odgovarajućeg kanonskog LR(1) parsera.
+Generator treba izgrađene tablice ugraditi u zasebno razvijen sintaksni analizator.
+Tablice parsera mogu se ugraditi u sintaksni analizator na više načina isto kao što su se tablice konačnog automata ugrađivale u leksički analizator u prvoj laboratorijskoj vježbi.
+
+Algoritam izgradnje tablica LR(1) parsera opisan je od stranice 148 udžbenika.
+Algoritam počinje dodavanjem novog početnog nezavršnog znaka i nove produkcije u zadanu gramatiku.
+Ovaj postupak opisan je u fusnoti na stranici 140 udžbenika.
+U teoretskom smislu, ako se originalni početni nezavršni znak gramatike ne pojavljuje s desne strane niti jedne produkcije, nije nužno dodavati novi početni nezavršni znak.
+Zbog uniformnosti, u ovoj laboratorijskoj vježbi generator LR(1) parsera \textbf{uvijek treba dodati novi početni nezavršni znak i odgovarajuću produkciju}.
+
+Algoritam nastavlja izgradnjom nedeterminističkog konačnog automata s epsilon prijelazima.
+Stanja automata označena su LR(1) stavkama.
+Zbog uniformnosti oznaka stanja, nije potrebno u $\varepsilon$-NKA ugraditi stanje $q_{0}$, nego se za početno stanje može koristiti LR(1) stavka koja proizlazi iz dodane produkcije koja iz novog početnog nezavršnog znaka generira originalni početni nezavršni znak gramatike zadan u Ulaznoj Datoteci.
+U ovom slučaju, automat sa i bez stanja $q_{0}$ potpuno su ekvivalentni tj.~prihvaćaju isti jezik.
+
+Prilikom izgradnje automata, nužno je računati ZAPOČINJE skupove za nizove znakova.
+Način računanja ZAPOČINJE skupova opisan je na 102.~stranici udžbenika.
+Za potrebe generiranja LR(1) parsera potrebno je proširiti domenu ZAPOČINJE skupova sa desnih strana produkcije na bilo koji sufiks desne strane produkcije (ili jednostavno na proizvoljne nizove završnih i nezavršnih znakova).
+Algoritam računanja ostaje potpuno isti.
+Dodatno, za generiranje LR(1) parsera \textbf{nije potrebno} određivati SLIJEDI skupove.
+
+Dobiveni $\varepsilon$-NKA treba pretvoriti u istovjetni DKA.
+Postupak pretvorbe $\varepsilon$-NKA u DKA opisan je u udžbeniku “Uvod u teoriju računarstva”.
+Stanja DKA označena su skupovima LR(1) stavki.
+Iz stanja i prijelaza DKA popunjavaju se tablice {\em Akcija} i {\em NovoStanje}.
+
+\subsection{Razrješavanje nejednoznačnosti}
+Iako je klasa LR(1) jezika široka i odgovara klasi determinističkih kontekstno neovisnih jezika (jezici koje može prepoznati deterministički potisni automat), pojedine konstrukte iz mnogih programskih jezika teško je opisati LR(1) gramatikom bez bitnog usložnjavanja gramatike ili je uopće nemoguće napisati odgovarajuću gramatiku.
+S obzirom da je složenost gramatike važna za semantičku analizu, pokazuje se da je dobro rješenje zadati gramatiku s pažljivo odabranim nejednoznačnostima koje se onda razriješe ili ručno ili koristeći jednostavna pravila koja su opisana u nastavku.
+
+Nejednoznačnosti u gramatici u gradnji LR(1) parsera očituju se kroz {\em Pomakni/Reduciraj} i {\em Reduciraj/Reduciraj} proturječja.
+{\em Pomakni/Reduciraj} proturječje izgrađeni generator treba razriješiti u korist akcije Pomakni.
+{\em Reduciraj/Reduciraj} proturječje potrebno je razriješiti u korist one akcije koja reducira produkciju zadanu ranije u Ulaznoj Datoteci.
+Poželjno je da generator korisniku ispiše gdje je došlo do proturječja i kako je proturječje razriješeno\footnote{Ovo se očito \emph{neće} provjeravati pri automatskoj evaluaciji rješenja na sustavu SPRUT.}.
+
+\section{Sintaksni analizator}
+Uloga sintaksnog analizatora u ovoj laboratorijskoj vježbi bit će parsiranje niza uniformnih znakova.
+Drugim riječima, sintaksni analizator treba provjeravati zadovoljava li niz uniformnih znakova sintaksna pravila zadana gramatikom u Ulaznoj Datoteci i konstruirati generativno stablo za dani program.
+Sintaksni analizator treba generativno stablo ispisati na standardni izlaz prema uputi u odjeljku \ref{sec:syn_ispis}.
+U nastavku je opisan način rada sintaksnog analizatora kojeg je potrebno ostvariti za ovu laboratorijsku vježbu.
+
+\subsection{Ulaz u sintaksni analizator}
+Analizator čita niz uniformnih znakova sa standardnog ulaza.
+Niz uniformnih znakova bit će oblikovan identično kao izlaz iz prve laboratorijske vježbe.
+U ulazu će se pojavljivati isključivo oni uniformni znakovi koji su definirani kao završni znakovi gramatike u Ulaznoj Datotoeci koja je predana generatoru.
+Leksičke jedinke neće započinjati ili završavati znakom praznine ili tabom i neće se protezati kroz više redaka, ali mogu sadržavati praznine (vidi primjere).
+
+Za sam postupak sintaksne analize važni su jedino uniformni znakovi, a broj retka i leksička jedinka služe za prijavljivanje grešaka i dodatno za ispis generativnog stabla kao što je opisano u nastavku.
+
+\subsection{Simulator LR parsera}
+Središnji algoritam generiranog sintaksnog analizatora je simulator LR parsera.
+Koristeći tablice {\em Akcija} i {\em NovoStanje}, simulator čita uniformne znakove iz niza uniformnih znakova i provjerava sintaksnu ispravnost ulaznog programa u jezični procesor.
+Dodatno, simulator gradi generativno stablo niza uniformnih znakova.
+Listovi generativnog stabla označeni su uniformnim znakovima ili epsilonom (znakom \verb|$|) u slučaju da list predstavlja desnu stranu \(\varepsilon\)-produkcije.
+Kad bi se generativno stablo obišlo dubinskim pretraživanjem uz obradu djece s lijeva na desno i uz ispisivanje listova, opet bismo dobili (isti) niz uniformnih znakova (epsilon predstavlja prazan niz).
+Uz sam uniformni znak, list generativnog stabla treba biti označen i retkom u kojem se pripadni uniformni znak nalazio u ulaznoj datoteci i indeksom odgovarajućeg zapisa u tablici znakova.
+Unutrašnji čvorovi generativnog stabla su označeni nezavršnim znakovima zadane gramatike.
+
+U ovoj laboratorijskoj vježbi, generativno stablo gradit će se eksplicitno.
+S tim ciljem, na stogu simulatora LR parsera trebaju se nalaziti čvorovi generativnog stabla (uz ostale podatke nužne za rad samog simulatora).
+Prilikom provođenja akcije {\em Pomakni}, simulator gradi novi list generativnog stabla i označava ga u skladu s ranijim opisom.
+Prilikom provođenja akcije {\em Reduciraj}, simulator gradi novi unutrašnji čvor stabla i čvorove sa stoga koji odgovaraju uzorku za zamjenu povezuje kao djecu novog unutrašnjeg čvora.
+U skladu s pravilima rada simulatora LR parsera, uzorak za zamjenu uklanja se sa stoga i zamjenjuje se znakom lijeve strane produkcije uz pripadno stanje i čvor stabla.
+Slijedeći ovaj postupak, prilikom izvođenja akcije {\em Prihvati}, na stogu simulatora nalazit će se korjen generativnog stabla označen početnim nezavršnim znakom gramatike.
+
+\subsection{Ispis generativnog stabla}\label{sec:syn_ispis}
+U ovoj laboratorijskoj vježbi, sintaksni analizator na standardni izlaz treba ispisati konstruirano generativno stablo.
+Ispis treba obaviti dubinskim obilaskom generativnog stabla, pri čemu se prvo ispisuje oznaka čvora roditelja, a nakon toga se ispisuju podstabla čiji korijeni su djeca čvora roditelja, s lijeva na desno.
+Na svakoj sljedećoj razini stabla, ispis treba prefiksirati jednim dodatnim razmakom.
+
+Pri ispisu oznaka unutrašnjih čvorova stabla treba ispisivati nezavršni znak gramatike kojim je čvor označen.
+Pri ispisu oznaka listova treba ispisati ili znak \verb|$| ako se radi o čvoru označenom epsilonom ili uniformni znak, broj retka i leksičku jedinku identično kao što je ista leksička jedinka opisana u ulazu analizatoru.
+Drugim riječima, nakon odgovarajućeg broja praznina (ovisno o dubini u generativnom stablu), treba ispisati uniformni znak, jedan znak razmaka, broj retka, jedan znak razmaka i leksičku jedinku.
+
+\subsection{Oporavak od pogreške}\label{sec:syn_oporavak}
+Za potrebe ove laboratorijske vježbe, u simulator LR parsera treba ugraditi jednostavan postupak oporavka od pogreške traženjem sinkronizacijskog znaka.
+Kada naiđe na pogrešku u nizu uniformnih znakova, simulator treba ispisati poruku o pogrešci u kojoj su navedeni\footnote{Ovo se neće provjeravati u automatskoj evaluaciji putem sustava SPRUT, ali se može provjeravati na usmenom odgovaranju vježbe.}:
+
+\begin{enumerate}
+\item
+broj retka u kojem se pogreška dogodila
+\item
+očekivani uniformni znakovi (oni znakovi koji ne bi izazvali pogrešku)
+\item
+pročitani uniformni znak iz niza uniformnih znakova i odgovarajući znakovni prikaz iz izvornog koda programa (dohvaćen iz tablice znakova).
+\end{enumerate}
+
+Nakon ispisa pogreške, simulator treba preskočiti sve znakove u nizu uniformnih znakova do prvog sljedećeg sinkronizacijskog znaka.
+Sinkronizacijski znakovi za gramatiku definirani su u Ulaznoj Datoteci.
+Kada je pronašao prvi sljedeći sinkronizacijski znak, simulator sa stoga odbacuje stanja (i pripadne podatke i čvorove stabla) dok ne dođe do nekog stanja s u kojem je definirana $Akcija[s, sinkronizacijski\_znak]$.
+Nakon toga simulator nastavlja s normalnim radom\footnote{Ovaj postupak oporavka od pogreške vrlo je jednostavan, ali očito daje i vrlo slabe rezultate, tj.~za veliku većinu sintaksnih pogrešaka oporavak neće biti osobito uspješan.}.
+
+\section{Primjeri}
+U ispisu \ref{lst:ulazna_datoteka_148} je prikazana Ulazna Datoteka za gramatiku sa 148.~stranice udžbenika, pri čemu je izbačen nezavrnšni znak \texttt{S} i pripadna prva produkcija, a nezavršni znak \texttt{A} je postavljen za početni nezavršni znak.
+Znak \texttt{S} je u toj gramatici služio kao ``novi početni nezavršni znak'', a njega sintaksni analizator iz ove vježbe samostalno dodaje.
+
+\begin{lstlisting}[caption={Ulazna Datoteka za gramatiku sa 148.~stranice udžbenika.},label=lst:ulazna_datoteka_148]
+%V <A> <B>
+%T a b
+%Syn b
+<A>
+ <B> <A>
+<B>
+ a <B>
+ b
+<A>
+ $
+
+\end{lstlisting}
+
+Sinkronizacijski znak je ovdje arbitrarno postavljen na \verb|b|, ali na ovom primjeru nećemo promatrati oporavak od pogreške.
+Završni znakovi gramatike \verb|a| i \verb|b| predstavljaju uniformne znakove leksičkih jedinki.
+
+Primjer ulaza u sintaksni analizator generiran za prethodnu Ulaznu Datoteku prikazan je u ispisu \ref{lst:ulaz_148}.
+U primjeru su nizu uniformnih znakova arbitrarno pridruženi brojevi redaka i leksičke jedine - recimo da uniformni znak \verb|a| predstavlja leksičke jedinke koje se sastoje od uzastopnih znakova \verb|x| (opcionalno odvojenih prazninama), a uniformni znak \verb|b| predstavlja leksičke jedinke koje se sastoje od uzastopnih znakova \verb|y| (opcionalno odvojenih prazninama).
+
+\begin{lstlisting}[caption={Ulaz u analizator za gramatiku sa 148.~stranice udžbenika.},label=lst:ulaz_148]
+a 1 x x x
+b 2 y y
+a 3 xx xx
+a 4 xx xx xx
+b 4 y
+
+\end{lstlisting}
+
+Ispis sintaksnog analizatora za dani primjer prikazan je u ispisu \ref{lst:ispis_148}.
+Ispis prikazuje stvoreno generativno stablo u skladu s opisom u odjeljku \ref{sec:syn_ispis}.
+
+\begin{lstlisting}[caption={Ispis analizatora za gramatiku sa 148.~stranice udžbenika i ulaz is ispisa \ref{lst:ulaz_148}.},label=lst:ispis_148]
+<A>
+ <B>
+  a 1 x x x
+  <B>
+   b 2 y y
+ <A>
+  <B>
+   a 3 xx xx
+   <B>
+    a 4 xx xx xx
+    <B>
+     b 4 y
+  <A>
+   $
+
+\end{lstlisting}
+
+Primjer Ulazne Datoteke generatora za podskup jezika C nalazi se \href{}{ovdje}.
+U ispisu \ref{lst:primjer_C_err} prikazan je ``C program'' sa sintaksnom pogreškom.
+
+\begin{lstlisting}[caption={Jednostavan C program sa sintaksnom greškom.},label=lst:primjer_C_err]
+int x = 3 &;
+int y = 2;
+
+\end{lstlisting}
+
+Za prikazani program, sintaksni analizator bi na standardni ulaz dobio ulaz prikazan u nastavku.
+
+\begin{lstlisting}[caption={Ulaz za sintaksni analizator za program \ref{lst:primjer_C_err}.},label=lst:primjer_C_err_ulaz]
+KR_INT 1 int
+IDN 1 x
+OP_PRIDRUZI 1 =
+BROJ 1 3
+OP_BIN_I 1 &
+TOCKAZAREZ 1 ;
+KR_INT 2 int
+IDN 2 y
+OP_PRIDRUZI 2 =
+BROJ 2 2
+TOCKAZAREZ 2 ;
+
+\end{lstlisting}
+
+Do sintaksne greške ovdje dolazi kada analizator čita uniformni znak \verb|TOCKAZAREZ| koji odgovara znaku \verb|;| iz prvog retka programa\footnote{Ponovno, izvorni kod je ovdje prikazan samo kako bi bilo lakse pratiti primjer --- niti jedan program u ovoj vježbi neće dobiti taj izvorni kod, već će sintaksni analizator izravno dobiti niz uniformnih znakova iz ispisa \ref{lst:primjer_C_err_ulaz}}.
+
+Kako je \verb|TOCKAZAREZ| jedan od sinkronizacijskih znakova, u postupku oporavka od pogreske se ne odbacuje niti jedan uniformni znak iz ulaza.
+U drugom koraku postupka oporavka od pogreške sa stoga se izbacuje list stabla koji predstavlja znak \verb|OP_BIN_I| tj.~znak \verb|&| iz ulaznog programa.
+Nakon izbacivanja tog znaka, parser može prihvatiti znak \verb|TOCKAZAREZ| pa ga i prihvaća i nastavlja s radom, tj.~postupak oporavka od pogreške je bio uspješan.
+
+Očekivani ispis analizatora može se vidjeti \href{}{ovdje}.
+
+Svi ovi kao i nekoliko složenijih primjera nalaze se u \href{}{ovoj arhivi}.
+Za jednostavnije primjere je dana i datoteka imena \verb|*_gen.txt| koja sadrži dio kontrolnog ispisa generatora što možda može biti korisno kod uklanjanja pogrešaka pri razvoju generatora.
+U tim datotekama su navedene izračunate relacije i generirani konačni automati, a za najjednostavniji primjer i tablice LR-parsera.
+
+Ulazne Datoteke za generator u arhivi imaju nastavak \verb|.san|, a ulazi i očekivani ispisi iz analizatora imaju nastavke \verb|.in| i \verb|.out|.
+Dodatno, uz primjere je priložen i \verb|.gif| generativnog stabla kako biste mogli dobiti osjećaj za to kako stablo izgleda, pogotovo za primjer podskupa jezika C što će biti važno za treću laboratorijsku vježbu.
+
+\section{Savjeti za implementaciju}
+U ovom poglavlju navedene su neke napomene koje mogu pomoći u ostvarenju ove laboratorijske vježbe.
+Poglavlje će biti prošireno ako se za tim pokaže potreba u skladu sa čestim pitanjima.
+
+\subsection{Računanje refleksivnog tranzitivnog okruženja relacije}
+Prilikom računanja skupova ZAPOČINJE, potrebno je izračunati relaciju {\em ZapočinjeZnakom} koja je refleksivno tranzitivno okruženje relacije {\em ZapočinjeIzravnoZnakom}.
+Na stranici 102 udžbenika na visokoj razini je opisano kako se spomenuto okruženje može izračunati.
+Korisno je relaciju {\em ZapočinjeZnakom} zamisliti kao usmjereni graf u kojem su znakovi čvorovi, a bridovi su članovi relacije {\em ZapočinjeZnakom}.
+Drugim riječima, ako i samo ako je u tablici relacije {\em ZapočinjeZnakom} za neki par znakova navedena jedinica, ti znakovi su u grafu spojeni usmjerenim bridom.
+Neki par znakova (X, Y) će biti u tranzitivnom okruženju dane relacije ako i samo ako u usmjerenom grafu postoji put od znaka X do znaka Y.
+Dodatno, s obzirom da tražimo {\em refleksivno} tranzitivno okruženje, u relaciji će biti i svi parovi (X, X).
+
+U skladu s ovom interpretacijom, postupak računanja opisan u knjizi trebalo bi ponavljati iterativno dok god se tablica nove relacije ne prestane mijenjati ili jednostavno ponoviti ga {\em n} puta gdje je {\em n} dimenzija tablice.
+Također, bilo koji drugi postupak za traženje puteva u grafu može se iskoristiti za računanje nove relacije.
+
+\section{Predaja druge laboratorijske vježbe}
+Predaja druge laboratorijske vježbe na sustav SPRUT odvijat će se isto kao predaja prve laboratorijske vježbe.
+
+Rješenje treba biti zapakirano u \texttt{zip} arhivu pri čemu se programski kod generatora nalazi u korijenskom direktoriju arhive.
+Nakon prevođenja i izvođenja generatora, u poddirektoriju \texttt{analizator} treba se nalaziti sve potrebno za prevođenje i izvođenje sintaksnog analizatora.
+
+Ulazna točka u generator za Javu treba biti u razredu \texttt{GSA}, a ulazna točka u analizator u razredu \texttt{SA}.
+Za Python, ulazna točka u generator će biti datoteka \texttt{GSA.py}, a ulazna točka u analizator datoteka \texttt{SA.py}.
+Za ostale jezike (uključujući C\#), imena datoteka su proizvoljna.
+
+\emph{Napomena:} predano rješenje za drugu vježbu ni na koji način ne ovisi o prvoj vježbi. Ulaz u sintaksni analizator u ovoj vježbi je niz uniformnih znakova u skladu s prethodnim opisom i nigdje u ovoj vježbi ne baratamo s izvornim kodom programa. Zato nemojte spajati leksički analizator s rješenjem ove vježbe i očekivati izvorni kod na ulazu.
 
 \newpage
 \addcontentsline{toc}{chapter}{Literatura}

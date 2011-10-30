@@ -1,0 +1,56 @@
+<prijevodna_jedinica>
+ <prijevodna_jedinica>
+  <vanjska_deklaracija>
+   <deklaracija>
+    <specifikatori_deklaracije>
+     <specifikator_tipa>
+      KR_INT 1 int
+    <lista_init_deklaratora>
+     <init_deklarator>
+      <izravni_deklarator>
+       IDN 1 x
+      OP_PRIDRUZI 1 =
+      <inicijalizator>
+       <izraz_pridruzivanja>
+        <log_ili_izraz>
+         <log_i_izraz>
+          <bin_ili_izraz>
+           <bin_xili_izraz>
+            <bin_i_izraz>
+             <jednakosni_izraz>
+              <odnosni_izraz>
+               <aditivni_izraz>
+                <multiplikativni_izraz>
+                 <cast_izraz>
+                  <unarni_izraz>
+                   <postfiks_izraz>
+                    <primarni_izraz>
+                     BROJ 1 3
+    TOCKAZAREZ 1 ;
+ <vanjska_deklaracija>
+  <deklaracija>
+   <specifikatori_deklaracije>
+    <specifikator_tipa>
+     KR_INT 2 int
+   <lista_init_deklaratora>
+    <init_deklarator>
+     <izravni_deklarator>
+      IDN 2 y
+     OP_PRIDRUZI 2 =
+     <inicijalizator>
+      <izraz_pridruzivanja>
+       <log_ili_izraz>
+        <log_i_izraz>
+         <bin_ili_izraz>
+          <bin_xili_izraz>
+           <bin_i_izraz>
+            <jednakosni_izraz>
+             <odnosni_izraz>
+              <aditivni_izraz>
+               <multiplikativni_izraz>
+                <cast_izraz>
+                 <unarni_izraz>
+                  <postfiks_izraz>
+                   <primarni_izraz>
+                    BROJ 2 2
+   TOCKAZAREZ 2 ;
