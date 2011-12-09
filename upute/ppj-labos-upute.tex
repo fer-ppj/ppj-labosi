@@ -3116,6 +3116,34 @@ Ako ovo pravilo nije zadovoljeno, semantički analizator treba na standardni izl
 \end{enumerate}
 
 
+\section{Savjeti za implementaciju}
+U ovom poglavlju navedene su neke napomene koje mogu pomoći u ostvarenju ove laboratorijske vježbe.
+Poglavlje će biti prošireno ako se za tim pokaže potreba u skladu sa čestim pitanjima.
+
+\subsection{Djelokrug deklaracija i tablica znakova}
+U semantičkoj analizi jezika \emph{ppjC}, naglasak je na provjeri tipova podataka i djelokruga deklaracija.
+Obje provjere se ostvaruju korištenjem tablice znakova.
+Na primjer, pri deklaraciji varijable, tip varijable se zapisuje u tablicu znakova, a kada se varijabla koristi u istom ili ugniježđenom djelokrugu, tip varijable se određuje na osnovi zapisa u tablici znakova.
+
+Kako je djelokrug deklaracija u jeziku \emph{ppjC} određen hijerarhijom blokova tj.~složenim naredbama (što je vrlo uobičajeno), prirodno je tablicu znakova također organizirati hijerarhijski, kao raspodijeljenu strukturu nad generativnim stablom.
+Pojedini dijelovi takve tablice znakova također čine stablastu strukturu koja u potpunosti odgovara blokovskoj strukturi programa koja je prikazana u generativnom stablu.
+
+Svakom djelokrugu deklaracija u programu, dakle globalnom djelokrugu i svim blokovima (što uključuje i tijela funkcija) pridružen je jedan čvor stablaste tablice znakova.
+Svaki čvor logički ima dva dijela: tablicu loklanih imena i kazaljku na čvor koji predstavlja ugniježđujući blok (ako takav postoji).
+Korijen stablaste tablice znakova očito predstavlja globalni djelokrug deklaracija i jedini je čvor koji nema kazaljku na ugniježđujući blok.
+
+Koristeći takvu strukturu tablice znakova, provjera mnogih semantičkih pravila jezika \emph{ppjC} može se pojednostaviti u odnosu na korištenje jednorazinske tablice znakova.
+Na primjer, u jednostavnoj tablici znakova osim tipa varijable (i eventualno još nekih značajki) nužno je na neki način zapisati u kojem djelokrugu je varijabla deklarirana.
+Nadalje, ako u dva ili više djelokruga postoji varijabla istog imena (što je semantički ispravno), u takvoj jednostavnoj tablici znakova trebalo bi biti više zapisa za isto ime.
+
+S druge strane, semantička pravila jezika garantiraju da su imena u svakom čvoru stablaste tablice znakova jedinstvena.
+Pretraživanje tablice svodi se na traženje imena u tablici lokalnih imena, a u slučaju da se ime tamo ne nalazi, pretražuje se čvor roditelj i tako sve do globalnog djelokruga.
+
+Konačno, čvor stablaste tablice znakova može se pri provjeri semantičkih pravila tretirati kao nasljedno svojstvo većine znakova gramatike.
+Prije obrade bloka (tj.~složene naredbe), gradi se novi čvor koji se koristi pri obradi tog bloka naredbi.
+Kazaljka na ugniježđujući blok novog čvora usmjeri se na nasljedno svojstvo složene naredbe.
+
+
 \section{Predaja treće laboratorijske vježbe}
 Za predaju treće laboratorijske vježbe, sve datoteke s programskim kodom treba zapakirati u \verb|zip|-arhivu.
 Ostala pravila jednaka su kao za prethodne vježbe, osim što više nije potreban direktorij \verb|analizator|.
