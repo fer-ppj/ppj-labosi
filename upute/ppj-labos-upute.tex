@@ -1439,7 +1439,7 @@ Varijabla \verb|x| deklarirana je u globalnom djelokrugu u kojem je deklarirana 
 Tijelo funkcije \verb|main| je blok, tj.~složena naredba, te kao takvo ima vlastiti djelokrug deklaracija u kojem je deklarirana varijabla \verb|y|.
 U tijelu funkcije \verb|main|, prethodno deklarirana imena iz globalnog djelokruga (u ovom slučaju \verb|x|) također su dostupna.
 
-\begin{lstlisting}[caption={Primjer pogreške u djelokrugu --- varijabla \texttt{x} nije deklarirana prije korištenja.},label=lst:primjer_djelokrug_2]
+\begin{lstlisting}[caption={Primjer pogreške u djelokrugu---varijabla \texttt{x} nije deklarirana prije korištenja.},label=lst:primjer_djelokrug_2]
 int main(void) {
     int y = x + 1; // greska
     return 0;
@@ -1465,11 +1465,13 @@ Deklaracija varijable \verb|x| u retku \verb|3| skriva globalnu varijablu \verb|
 \begin{lstlisting}[caption={Sakrivanje deklaracije u bloku.},label=lst:primjer_djelokrug_4]
 int main(void) {
     int x = 3;
+    int z;
     {
       int x = 5;
       int y = x + 1; // 6
+      z = y + 1; // 7
     }
-    int y = x + 1; // 4
+    z = x + 1; // 4
     return 0;
 }
 \end{lstlisting}
