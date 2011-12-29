@@ -1334,6 +1334,14 @@ Drugim riječima, čim otkrije prvu semantičku pogrešku i obavi odgovarajući 
 Ako je program prikazan generativnim stablom na ulazu semantički ispravan, semantički analizator ne smije ispisati ništa na standardni izlaz\footnote{Isto kao u prethodnim vježbama, sav ostali ispis, na primjer smislenije poruke o pogrešci namijenjene korisnicima cjelovitog kompilatora, mora ići na standardni izlaz za greške, tj.~\texttt{stderr}.}.
 
 
+\section{Predaja treće laboratorijske vježbe}
+Za predaju treće laboratorijske vježbe, sve datoteke s programskim kodom treba zapakirati u \verb|zip|-arhivu.
+Ostala pravila jednaka su kao za prethodne vježbe, osim što više nije potreban direktorij \verb|analizator|.
+
+Ulazna točka za Javu treba biti u razredu \verb|SemantickiAnalizator|, a ulazna točka za Python treba biti u datoteci \verb|SemantickiAnalizator.py|.
+Za ostale jezike imena datoteka i razreda su proizvoljna.
+
+
 \section{Opis jezika \emph{ppjC}}
 U ovom poglavlju dan je pregled jezika kako bi se olakšalo praćenje semantičkih pravila u poglavlju \ref{sec:semanticka_pravila}.
 Neki dijelovi ovog opisa možda neće biti odmah jasni, ali bit će dodatno razjašnjeni kroz opis semantičkih pravila.
@@ -1376,7 +1384,7 @@ int f1(char a, char b) {
 }
 
 void f2(int x) {
-    return x;
+    return;
 }
 
 void f3(void) {
@@ -3108,7 +3116,7 @@ U produkcijama se računaju izvedena svojstva \emph{br-elem} i \emph{tipovi}, s 
 \end{itemize}
 
 \subsection{Provjere nakon obilaska stabla}\label{sec:semantika_after}
-Konačno, nakon obilaska stabla i provjere svih navedenih semantičkih pravila, semantički analizator treba provjeriti još dva pravila\footnote{Ova pravila tipično ne bi bila u domeni semantičke analize, ali kako jezik \emph{ppjC} ne podržava više od jedne datoteke s izvornim programom i samim time ne postoji potreba za povezivačem (engl. \emph{linker}), semantički analizator treba provjeriti i ova pravila.}
+Konačno, nakon obilaska stabla i provjere svih navedenih semantičkih pravila, semantički analizator treba provjeriti još dva pravila\footnote{Ova pravila tipično ne bi bila u domeni semantičke analize, ali kako jezik \emph{ppjC} ne podržava više od jedne datoteke s izvornim programom i samim time ne postoji potreba za povezivačem (engl.~\emph{linker}), semantički analizator treba provjeriti i ova pravila.}
 
 \begin{enumerate}
 \item
@@ -3148,12 +3156,301 @@ Prije obrade bloka (tj.~složene naredbe), gradi se novi čvor koji se koristi p
 Kazaljka na ugniježđujući blok novog čvora usmjeri se na nasljedno svojstvo složene naredbe.
 
 
-\section{Predaja treće laboratorijske vježbe}
-Za predaju treće laboratorijske vježbe, sve datoteke s programskim kodom treba zapakirati u \verb|zip|-arhivu.
-Ostala pravila jednaka su kao za prethodne vježbe, osim što više nije potreban direktorij \verb|analizator|.
 
-Ulazna točka za Javu treba biti u razredu \verb|SemantickiAnalizator|, a ulazna točka za Python treba biti u datoteci \verb|SemantickiAnalizator.py|.
-Za ostale jezike imena datoteka i razreda su proizvoljna.
+\chapter{Četvrta laboratorijska vježba}\label{chap:IV}
+Tema četvrte laboratorijske vježbe je generiranje koda.
+Vježba se u velikoj mjeri naslanja na treću laboratorijsku vježbu, ali i djelomično riješena treća vježba može poslužiti kako bi se djelomično riješila četvrta vježba.
+
+U praksi je generiranje \emph{kvalitetnog} koda (učinkovitog po raznim parametrima) vrlo složen problem koji se i sam tipično obavlja u više faza, kao što je i objašnjeno u udžbeniku i na predavanjima.
+U ovoj laboratorijskoj vježbi je generiranje koda maksimalno pojednostavljeno, pa se tako ne ocjenjuje kvaliteta generiranog koda nego isključivo njegova točnost.
+
+Jedan od problema u prijašnjim inačicama ovih laboratorijskih vježbi bila je činjenica da većina studenata ili ne zna ili slabo poznaje mnemonički jezik nekog stvarnog procesora.
+Kako bi se izbjegao taj problem, u ovoj vježbi će se generirati mnemonički jezik procesora FRISC koji se uči na predmetu \emph{Arhitektura računala} FER-2 programa.
+Simulator procesora FRISC u web-pregledniku dostupan je \href{http://fer-ppj.github.com/FRISCjs/main.html}{ovdje}\footnote{Preciznije rečeno, uneseni program pisan mnemoničkim jezikom procesora FRISC prevodi se mnemoničkim asemblerom u strojne naredbe procesora FRISC. Generirane strojne naredbe pune se u memoriju od adrese \texttt{0} (ako nije drugačije zadano asemblerskom naredbom \texttt{\`{}ORG}) i simulira se rad procesora FRISC. U nastavku upute ćemo zbog jednostavnosti o cijelom ovom postupku govoriti kao o simulatoru.}.
+Isti simulator može se pokrenuti i iz naredbenog retka, koristeći \href{http://nodejs.org}{Node.js} platformu.
+Uz instaliran Node.js, bit će potrebno u jedan direktorij dohvatiti i datoteke \href{https://github.com/fer-ppj/FRISCjs/raw/master/friscasm.js}{friscasm.js}, \href{https://github.com/fer-ppj/FRISCjs/raw/master/friscjs.js}{friscjs.js} i \href{https://github.com/fer-ppj/FRISCjs/raw/master/main.js}{main.js}.
+Ako je FRISC mnemonički program zapisan u datoteci \verb|a.frisc|, program se može simulirati naredbom \verb|node main.js a.frisc|.
+
+Alternativno, za ispitivanje ispravnosti generiranih programa može se koristiti i ATLAS kao na predmetu \emph{Arhitektura računala}.
+Ako naiđete na neke razlike u funkcionalnosti između ATLAS-a i gore opisanog simulatora, javite se na e-mail listu predmeta \emph{ppj@zemris.fer.hr}.
+
+\section{Ulaz i izlaz generatora koda}
+Ulaz u četvrtu laboratorijsku vježbu bit će isti kao ulaz u treću vježbu, tj.~generativno stablo \emph{ppjC} programa.
+Važno je uočiti da je ulaz ``obično'' generativno stablo i nad njim treba provesti semantičku analizu.
+Svi zadani programi bit će semantički ispravni, ali je semantičku analizu ipak potrebno provesti kako bi bilo moguće generirati kod.
+Iz tog razloga je predviđeni način rješavanja ove laboratorijske vježbe proširenje rješenja treće laboratorijske vježbe u kojoj se provodi semantička analiza.
+
+Rješenje četvrte laboratorijske vježbe treba zapisati generirani mnemonički program za procesor FRISC u datoteku \verb|a.frisc| u istom direktoriju u kojem se nalazi sam generator koda.
+Kako zbog jednostavnosti jezik \emph{ppjC} ne podržava unos i ispis podataka, kao rezultat izvođenja programa promatrat će se povratna vrijednost iz funkcije \verb|main| koju generirani mnemonički program prije izvođenja instrukcije \verb|HALT| mora zapisati u registar \verb|R6|.
+
+\textbf{Važna napomena:} Iz prethodno navedenog razloga, moguće je ``optimizirati'' cijeli ulazni program u dvije instrukcije---jednu koja puni registar \verb|R6| rezultatom izvođenja i jednu \verb|HALT| instrukcij---tako da generator jednostavno odsimulira ulazni program.
+Iako bi se moglo reći da je to najbolji mogući generirani kod za zadani program, to očito nije smisao ove laboratorijske vježbe i takva rješenja bit će bodovana s 0 bodova.
+S druge strane, dozvoljeno je (iako ne i nužno) tijekom prevođenja izračunati konstante izraze, tj.~izraze koji sadrže samo konstante i eventualno \verb|const|-kvalificirane varijable.
+Naprednije postupke kojima bi se moglo izračunati i izraze koji sadrže varijable koje nisu \verb|const|-kvalificirane \textbf{nemojte} provoditi.
+
+Prethodno navedeni simulator za naredbeni redak na standardni izlaz ispisuje vrijednost u registru \verb|R6| nakon izvođenja instrukcije \verb|HALT|, a isti simulator koristit će se pri automatskoj evaluaciji rješenja.
+Drugim riječima, u ovoj vježbi će se automatski provjeravati samo rezultat izvođenja FRISC programa kojeg generira rješenje ove laboratorijske vježbe, a ne i sam generirani FRISC program.
+
+Konačno, u jednoj rečenici bi se moglo reći da je zadatak četvrte laboratorijske vježbe napisati program koji će, na osnovi zadanog generativnog stabla na standardnom ulazu, u datoteku \verb|a.frisc| generirati program u mnemoničkom jeziku procesora FRISC koji povratnu vrijednost funkcije \verb|main| pohranjuje u registar \verb|R6|.
+Sve ostalo odradit će sustav SPRUT.
+
+\section{Značajke simulatora}\label{sec:znacajke_simulatora}
+Simulator koji će se koristiti pri evaluaciji rješenja ove laboratorijske vježbe bi po svim funkcionalnim značajkama trebao biti jednak onom koji se koristi na predmetu \emph{Arhitektura računala}.
+Drugim riječima, simulator podržava sve mnemoničke naredbe procesora FRISC i sve \emph{pseudonaredbe} kao što su \texttt{\`{}ORG} i \texttt{\`{}DW}.
+
+Na procesor je spojena memorija od \verb|256KB| na adresama \verb|0|--\verb|3FFFF|.
+Iz tog razloga je preporučljivo pokazivač stoga (registar \verb|R7|) na početku programa inicijalizirati na adresu \verb|40000|\(_{16} =\)\verb| 262144|\(_{10}\) (to je prva memorijska adresa koja ne postoji).
+
+\section{Karakteristike ispitnih primjera za četvrtu laboratorijsku vježbu}
+S ciljem omogućavanja djelomičnog bodovanja rješenja ove vježbe, veliki dio ispitnih primjera bit će vrlo kratki i fokusirani na neku specifičnu značajku jezika.
+Na taj način će i s rješenjem koje ne podržava dio jezika (na primjer, neke operatore, rekurzivno pozivanje funkcija i slično) biti moguće ostvariti dio bodova.
+Ipak, važno je imati na umu da svaki \emph{ppjC} program ima barem jednu funkciju (funkciju \verb|main|) i provjerava se povratna vrijednost funkcije pa je za bilo kakve bodove nužno generirati kod barem za jednostavne funkcije bez parametara i lokalnih varijabli koje vraćaju vrijednost.
+
+\section{Predaja četvrte laboratorijske vježbe}
+Ulazna točka za Javu treba biti u razredu \verb|GeneratorKoda|, a ulazna točka za Python treba biti u datoteci \verb|GeneratorKoda.py|.
+Ostala pravila za predaju četvrte laboratorijske vježbe jednaka su kao za treću vježbu.
+
+\section{Proširenje nekih semantičkih pravila}
+U ovom poglavlju su ukratko navedena još neka semantička pravila koja se odnose na generiranje koda.
+Drugim riječima, u semanatičkoj analizi ne treba ništa novo provjeravati, nego pravila definiraju kakav kod treba generirati.
+
+\subsection{Semantička pravila inkrement i dekrement operatora}
+Isto kao \emph{C}, jezik \emph{ppjC} ima postfiks i prefiks inačice inkrement i dekrement operatora.
+Precizan opis značenja tih operatora u \emph{C}-u, točnije trenutak u kojem se događa promjena vrijednosti varijable, relativno je složen i sličan opis ovdje ne bi imao smisla jer se radi o detalju koji nije previše bitan.
+
+Zato ćemo za jezik \emph{ppjC} definirati da se vrijednost varijable mijenja neposredno prije čitanja vrijednosti za prefiks inkrement i dekrement operatore i neposredno poslije čitanja vrijednosti za postfiks inkrement i dekrement.
+Na primjer, ako se izrazi izračunavaju koristeći stog\footnote{Vidi poglavlje \ref{sec:izracunavanje_izraza}.}, za izraz \verb|i++| (što može biti dio nekog većeg izraza) treba generirati kod koji dohvaća vrijednost varijable \verb|i| u registar, pohranjuje tu vrijednost na stog, povećava vrijednost u registru i zapisuje vrijednost u memoriju na adresu koja odgovara varijabli \verb|i|.
+
+Dodatno, definirat ćemo da sva korištenja ovih operatora koja imaju nedefinirano značenje u jeziku \emph{C} imaju nedefinirano značenje i u jeziku \emph{ppjC}, tj.~neće se pojavljivati u ispitnim primjerima\footnote{Primjeri takvih naredbi su: \texttt{a[i] = i++; x = --i + i; i = i--; x = f(i, i++);} i slično.}.
+Ovo drugim riječima znači da zbog ovih operatora ne treba posebno brinuti o tome kojim redoslijedom se izračunavaju lijeva i desna strana binarnih operatora, vrijednosti argumenata funkcija i slično.
+
+\subsection{Semantička pravila operatora \texttt{\%}}
+Zbog jednostavnosti, operator \verb|%| ćemo definirati samo za pozitivne operande i za slučaj kada je lijevi operand \verb|0|, a desni operand pozitivan broj.
+Rezultat je ostatak pri dijeljenju lijevog operanda s desnim.
+
+\section{Savjeti za implementaciju}
+U ovom poglavlju su navedeni neki savjeti za implementaciju generatora koda.
+Preporučamo da savjete pročitate, a po želji možete neke ili sve u potpunosti zanemariti.
+Svi primjeri FRISC koda u ovom poglavlju su ilustrativni, tj.~ni u kom slučaju nije nužno da generator generira \emph{točno takav} kod.
+Štoviše, većina generatora generirat će za ove primjere kod sa više instrukcija i to nije nikakav problem ako je funkcionalnost izvornog \emph{ppjC} programa očuvana.
+
+\subsection{Organizacija generiranog programa}
+Prije početka rada na generiranju koda, treba razmisliti kako će generirani program biti organiziran, tj.~gdje će se nalaziti potprogrami, gdje će biti globalne varijable, na kojoj adresi počinje stog i slično.
+U nastavku poglavlja je načelno i na kratkim primjerima opisana jedna moguća organizacija generiranog programa.
+
+Kako izvođenje programa počinje od adrese \verb|0|, na početku generiranog programa moraju biti instrukcije (a ne podaci).
+Svaki program mora inicijalizirati stog, pozvati proceduru koja je generirana na osnovi funkcije \verb|main|, povratnu vrijednost pohraniti u registar \verb|R6| i izvesti instrukciju \verb|HALT|.
+Kao što je spomenuto u poglavlju \ref{sec:znacajke_simulatora}, preporučljivo je pokazivač stoga inicijalizirati na adresu \verb|40000|\(_{16}\) jer stog procesora FRISC raste prema nižim adresama.
+Nadalje, pretpostavit ćemo da svi potprogrami vraćaju vrijednost putem registra \verb|R6|\footnote{Vidi poglavlje \ref{sec:argumenti_i_povratne_vrijednosti}.}.
+Uz ove dvije odluke, početak i kraj izvođenja programa ostvaruju se sa tri instrukcije na adresama \verb|0|, \verb|4| i \verb|8|, prikazane u ispisu \ref{lst:primjer_init_halt}.
+
+\begin{lstlisting}[caption={Instrukcije za inicijalizaciju i završetak izvođenja programa.},label=lst:primjer_init_halt]
+        MOVE 40000, R7
+        CALL F_MAIN
+        HALT
+\end{lstlisting}
+
+Labela \verb|F_MAIN| u ispisu predstavlja adresu potprograma koji je generiran iz funkcije \verb|main| ulaznog programa u jeziku \emph{ppjC}.
+Na primjer, za jednostavan ulazni program u ispisu \ref{lst:primjer_main_return42} mogli bismo generirati program sličan onom u ispisu \ref{lst:primjer_main_return42_frisc}.
+
+\begin{lstlisting}[caption={Jednostavan \emph{ppjC} program.},label=lst:primjer_main_return42]
+int main(void) {
+  return 42;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Mogući generirani FRISC mnemonički program za ispis \ref{lst:primjer_main_return42}.},label=lst:primjer_main_return42_frisc]
+        MOVE 40000, R7
+        CALL F_MAIN
+        HALT
+        
+F_MAIN  MOVE %D 42, R6
+        RET
+\end{lstlisting}
+
+Nakon generiranih instrukcija za inicijalizaciju, mogu se generirati potprogrami za svaku funkciju u programu, slično kao što je prikazano u prethodnom primjeru za funkciju \verb|main|.
+Svakom potprogramu se pridijeli jedinstvena labela koja omogućuje pozivanje tog potprograma instrukcijom \verb|CALL|.
+
+Nakon koda procedura, mogu se rezervirati memorijske lokacije za globalne varijable.
+Na primjer, za program u ispisu \ref{lst:primjer_main_x} mogao bi se generirati program sličan onom u ispisu \ref{lst:primjer_main_x_frisc}.
+
+\begin{lstlisting}[caption={Jednostavan \emph{ppjC} program s globalnom varijablom.},label=lst:primjer_main_x]
+int x = 12;
+int main(void) {
+  return x;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Mogući generirani FRISC mnemonički program za ispis \ref{lst:primjer_main_x}.},label=lst:primjer_main_x_frisc]
+        MOVE 40000, R7
+        CALL F_MAIN
+        HALT
+        
+F_MAIN  LOAD R6, (G_X)
+        RET
+
+G_X     DW %D 12
+\end{lstlisting}
+
+Konačno, prostor nakon globalnih varijabli može biti koristan za neke konstante u programu, a s kraja memorije ga puni i rastući stog.
+
+\subsection{Preslikavanje funkcije jezika \emph{ppjC} u FRISC potprogram}\label{sec:funkcija->potprogram}
+Kako svaki \emph{ppjC} program sadrži barem jednu funkciju, važno je razmisliti o različitim pitanjima koja se pojavljuju pri preslikavanju funkcija u potprograme u mnemoničkom jeziku.
+
+\subsubsection{Prenošenje argumenata i povratne vrijednosti}\label{sec:argumenti_i_povratne_vrijednosti}
+U ostvarenju preslikavanja funkcija u potprograme, ključno je odlučiti na koji način će potprogram komunicirati sa svojim pozivateljem, tj.~na koji način pozivatelj potprogramu prenosi argumente i na koji način potprogram vraća povratnu vrijednost pozivatelju.
+I za prenošenje argumenata i za povratnu vrijednost postoje barem tri mogućnosti: korištenje registara, korištenje stoga i korištenje poznatih memorijskih lokacija tj.~adresa.
+Štoviše, različiti potprogrami mogu na različite načine komunicirati s pozivateljem.
+
+Zbog jednostavnosti, preporuča se za sve potprograme koristiti stog za argumente i registar \verb|R6| za povratnu vrijednost.
+Uz takvu organizaciju, kako bi pozvao potprogram, pozivatelj na stog mora postaviti argumente i izvesti instrukciju \verb|CALL| s odgovarajućom labelom, a povratna vrijednost se nakon povratka iz potprograma nalazi u registru \verb|R6|.
+Potprogram pristupa predanim argumentima koristeći pokazivač stoga (registar \verb|R7|) i registarsko indirektno adresiranje s odmakom.
+Naime, kako generator koda generira sve ove instrukcije, lako je \emph{tijekom prevođenja} odrediti potrebne odmake za sve parametre.
+
+Preostaje odlučiti što učiniti s argumentima na stogu nakon završetka izvođenja potprograma.
+Jedna mogućnost je da pozivatelj nakon instrukcije \verb|CALL| uveća pokazivač stoga za odgovarajuću vrijednost i na taj način ``obriše'' argumente sa stoga.
+Ova mogućnost prikazana je u ispisu \ref{lst:primjer_poziv_funkcije_frisc}.
+
+\begin{lstlisting}[caption={Jednostavan \emph{ppjC} program s pozivom funkcije.},label=lst:primjer_poziv_funkcije]
+int f(int y) {
+  return y;
+}
+int x = 12;
+int main(void) {
+  return f(x);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Mogući generirani FRISC mnemonički program za ispis \ref{lst:primjer_poziv_funkcije}.},label=lst:primjer_poziv_funkcije_frisc]
+        MOVE 40000, R7
+        CALL F_MAIN
+        HALT
+        
+F_MAIN  LOAD R0, (G_X)
+        PUSH R0
+        CALL F_F
+        ADD R7, 4, R7
+        RET
+
+F_F     LOAD R6, (R7+4)
+        RET
+
+G_X     DW %D 12
+\end{lstlisting}
+
+Naredba koja pomiče pokazivač stoga nalazi se u retku 8.
+U ovom slučaju, pokazivač stoga se pomiče za \verb|4| jer je postojao samo jedan četverobajtni argument.
+Uočite da bi se bez ove naredbe vrijednost argumenta (u ovom slučaju \verb|12|) interpretirala kao povratna adresa potprograma \verb|F_MAIN| u instrukciji \verb|RET|.
+
+Druga mogućnost je da sam potprogram prije završetka rada ukloni argumente sa stoga \emph{pazeći na svoju povratnu adresu}.
+I ovu mogućnost je relativno jednostavno ostvariti, ali nije ovdje prikazana.
+Preporuča se konzistentno korištenje jednog od ova dva načina obnavljanja stoga za sve potprograme.
+
+\subsubsection{Lokalne varijable}
+Lokalne varijable se slično kao i parametri mogu pohranjivati na stog, u registre ili na određene memorijske lokacije.
+Kako bi se omogućilo rekurzivno pozivanje potprograma, najjednostavnije je lokalne varijable pohraniti na stog, na početku potprograma.
+Lokalne varijable se onda u potprogramu koriste isto kao i parametri, registarskim indirektnim adresiranjem s odmakom.
+
+Eventualne inicijalizacije lokalnih varijabli mogu se obaviti i nakon što su za sve parametre osigurana mjesta na stogu kako bi odmaci od pokazivača stoga bili konstantni.
+Mjesto se na stogu može osigurati jednostavnim smanjenjem pokazivača stoga, pri čemu je po pravilima jezika dozvoljeno da neinicijalizirane lokalne varijable imaju neodređene vrijednosti (vrijednosti će ovisiti o sadržaju stoga u nekom prethodnom izvođenju nekog potprograma).
+Prije izvođenja instrukcije \verb|RET|, potprogram mora vratiti pokazivač stoga na originalno mjesto, tj.~ukloniti lokalne varijable sa stoga.
+
+\begin{lstlisting}[caption={Funkcija s lokalnom varijablom.},label=lst:primjer_lokalna_varijabla]
+int f(int y) {
+  int x = y;
+  int z;
+  return x;
+}
+int x = 12;
+int main(void) {
+  return f(x);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Mogući generirani FRISC mnemonički program za ispis \ref{lst:primjer_lokalna_varijabla}.},label=lst:primjer_lokalna_varijabla_frisc]
+        MOVE 40000, R7
+        CALL F_MAIN
+        HALT
+        
+F_MAIN  LOAD R0, (G_X)
+        PUSH R0
+        CALL F_F
+        ADD R7, 4, R7
+        RET
+
+F_F     SUB R7, 8, R7 ; mjesto za x i z
+        LOAD R0, (R7+0C)
+        STORE R0, (R7+4) ; inicijalizacija lokalne varijable x
+        LOAD R6, (R7+4) ; povratna vrijednost
+        ADD R7, 8, R7 ; skidanje lokalnih varijabli sa stoga
+        RET
+
+G_X     DW %D 12
+\end{lstlisting}
+
+\subsubsection{Čuvanje konteksta}
+Ako se u generiranju koda koristi neki algoritam za dodjelu registara (što se u ovoj vježbi \textbf{ne preporuča}; vidi poglavlje \ref{sec:izracunavanje_izraza}), onda može biti važno da potprogrami tijekom svog rada ne promijene sadržaj određenih registara.
+Kontekst se tipično čuva tako da se na početku potprograma vrijednosti nekih ili svih registara zapišu na stog te se prije završetka rada potprograma te iste vrijednosti pohrane nazad u registre.
+
+Dodatno, treba razmisliti o tome hoće li potprogram čuvati i vrijednost statusnog registra ili ne.
+Čuvanje vrijednosti statusnog registra može pozitivno djelovati na neke postupke optimiranja, ali za potrebe ove vježbe se ne preporuča.
+
+Nedostatak čuvanja konkteksta je potrošnja procesorskog vremena, ali takva organizacija potprograma bitno olakšava neke postupke dodjele registara i općenito omogućuje učinkovitije korištenje registara jer pozivi potprograma ne utječu na vrijednosti registara (osim eventualno na vrijednost registra koji se koristi za prijenos povratne vrijednosti).
+
+\subsection{Jednostavno izračunavanje izraza korištenjem stoga}\label{sec:izracunavanje_izraza}
+Kako je generiranje koda koji učinkovito koristi registare čak i u jednostavnim inačicama relativno složen problem, za potrebe ove laboratorijske vježbe se preporuča izračunavanje izraza korištenjem stoga.
+Pritom se registri koriste samo privremeno, kako bi se dohvatile odgovarajuće vrijednosti sa stoga i kako bi se obavila odgovarajuća operacija, nakon čega se izračunata vrijednost opet pohranjuje na stog.
+
+Pokazivač stoga će se tijekom ovog postupka mijenjati što otežava pristupanje parametrima i lokalnim varijablama potprograma.
+Ispravni odmaci se svakako daju izračunati, a alternativa je u svakom potprogramu rezervirati jedan registar (na primjer \verb|R6| u koji se na kraju potprograma pohranjuje povratna vrijednost) za adresu \emph{okvira funkcije} koja se može inicijalizirati, na primjer, nakon zauzimanja prostora za lokalne varijable i nakon toga se ne mijenja do kraja izvođenja potprograma.
+U tom slučaju, vrijednost tog registra treba pohraniti na stog prije svake \verb|CALL| instrukcije u potprogramu i dohvatiti ju sa stoga nakon te instrukcije.
+
+Na primjer, za računanje vrijednosti izraza \verb|x + y| gdje su \verb|x| i \verb|y| globalne varijable, mogao bi se generirati FRISC kod prikazan u ispisu \ref{lst:primjer_racunanje_stogom}.
+
+\begin{lstlisting}[caption={Računanje izraza \texttt{x + y} primjenom stoga.},label=lst:primjer_racunanje_stogom]
+        LOAD R0, (G_X)
+        PUSH R0
+
+        LOAD R0, (G_Y)
+        PUSH R0
+
+        POP R1
+        POP R0
+        ADD R0, R1, R0
+        PUSH R0
+\end{lstlisting}
+
+Pri obradi primarnih izraza \verb|x| i \verb|y| generirale bi se po dvije instrukcije u retcima 1--2 i 4--5, a pri obradi operatora zbrajanja (u produkciji znaka \verb|<aditivni_izraz>|) generirale bi se četiri instrukcije u retcima 7--10.
+
+\subsection{Množenje, dijeljenje i operator ostatka}
+Kako FRISC nema instrukcije za obavljanje ovih operacija, njihovo provođenje mora se riješiti ručno što čini implementaciju ovih operatora znatno složenijom od implementacije ostalih operatora.
+Najjednostavniji način za ostvariti ove operatore je sa dva potprograma koji se mogu ugraditi u svaki program koji koristi operatore (ili čak i u programe koji ih ne koriste).
+Pritom ne treba paziti na rezultate koji izlaze iz opsega tipa \verb|int| jer su takvi rezultati u pravilima jezika ostavljeni nedefiniranima.
+
+Implementacija ovih operatora nije previše važna (pogotovo s obzirom na relativnu složenost u odnosu na implementaciju ostalih operatora) i preporuča se implementirati ove operatore pri kraju rada na generatoru koda, ako za to bude vremena.
+
+\subsection{Kako početi rješavati laboratorijsku vježbu}
+Prošlih godina je jedno od čestih pitanja bilo upravo kako započeti rad na generatoru koda.
+Dobra strategija je početi od najjednostavnijeg primjera \emph{ppjC} programa i za njega napisati odgovarajući FRISC kod te ga isprobati na simulatoru.
+Iz jednostavnih primjera moguće je osmisliti općenite pristupe za generiranje različitih dijelova programa i to inkrementalno implementirati u generator.
+
+Pri pisanju odgovarajućeg FRISC koda, bitno je pokušati ``imitirati'' trenutni mentalni model generatora koda, što smo pokušali ilustrirati u ovim savjetima za implementaciju.
+Kada se taj model promijeni, treba revidirati prethodno obrađene primjere i provjeriti je li sve u redu.
+Na primjer, ako bismo odlučili da će se izrazi izračunavati koristeći stog, čini se da bismo uniformnom primjenom tog modela za jednostavni program iz ispisa \ref{lst:primjer_main_return42} u kojem funkcija \verb|main| jednostavno vraća konstantu \verb|42| mogli umjesto instrukcije \verb|MOVE %D 42, R6| generirati tri instrukcije, kao što je prikazano u ispisu \ref{lst:primjer_main_return42_frisc2}.
+
+\begin{lstlisting}[caption={FRISC mnemonički program za ispis \ref{lst:primjer_main_return42} uz konzistentno računanje izraza pomoću stoga.},label=lst:primjer_main_return42_frisc2]
+        MOVE 40000, R7
+        CALL F_MAIN
+        HALT
+        
+F_MAIN  MOVE %D 42, R0
+        PUSH R0
+        POP R6
+        RET
+\end{lstlisting}
+
+Instrukcije u retcima 5 i 6 mogle bi se generirati pri obradi izraza \verb|42|, a instrukcije u retcima 7 i 8 pri obradi \verb|return| naredbe.
+
 
 \newpage
 \addcontentsline{toc}{chapter}{Literatura}
