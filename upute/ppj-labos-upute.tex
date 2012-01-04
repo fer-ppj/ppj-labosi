@@ -3228,6 +3228,18 @@ Ovo drugim riječima znači da zbog ovih operatora ne treba posebno brinuti o to
 Zbog jednostavnosti, operator \verb|%| ćemo definirati samo za pozitivne operande i za slučaj kada je lijevi operand \verb|0|, a desni operand pozitivan broj.
 Rezultat je ostatak pri dijeljenju lijevog operanda s desnim.
 
+\subsection{Evaluacija operanada logičkih operatora}
+Logički operatori u jeziku \emph{ppjC}, isto kao u \emph{C}-u, \textbf{ne evaluiraju} desni operand ako se rezultat može jednoznačno odrediti na osnovi vrijednosti lijevog operanda\footnote{Ovakav način evaluacije operanada se u literaturi na engleskom jeziku obično naziva \emph{short-circuit evaluation}.}.
+Konkretno, za operator \verb|&&|, ako lijevi operand nije istinit, rezultat primjene operatora će sigurno biti neistina, bez obzira na vrijednost desnog operanda.
+U tom slučaju, desni operand se ne evaluira.
+
+Ispravnost mnogih programa u jezicima koji definiraju ovakvo značenje logičkih operatora ovisi upravo o tome da se desni operand konjunkcije ne evaluira kada je lijevi operand neistinit.
+Pretpostavimo da je definiran neki niz znakova \verb|a| duljine \verb|n|.
+Ovaj način evaluacije operanada bio bi važan, na primjer, za izraz \verb|i<n && a[i]='x'|.
+Ako je indeks \verb|i| prevelik za indeksiranje u niz \verb|a|, tj.~lijevi operand operatora \verb|&&| je lažan, važno je da se desni operand ne evaulira\footnote{U primjeru je namjerno kao desni operand korišten izraz pridruživanja kako bi bila jasna razlika između rezultata izvođenja u slučaju da se taj desni operand evaluira i u slučaju da se ne evaluira, iako je jednako neispravno samo i pročitati vrijednost izvan granica niza.}.
+
+Slično, za operator \verb#||#, desni operand se ne evaluira ako je lijevi operand istinit jer je tada rezultat sigurno istina, bez obzira na vrijednost desnog operanda.
+
 \section{Savjeti za implementaciju}
 U ovom poglavlju su navedeni neki savjeti za implementaciju generatora koda.
 Preporučamo da savjete pročitate, a po želji možete neke ili sve u potpunosti zanemariti.
@@ -3271,7 +3283,7 @@ F_MAIN  MOVE %D 42, R6
 Nakon generiranih instrukcija za inicijalizaciju, mogu se generirati potprogrami za svaku funkciju u programu, slično kao što je prikazano u prethodnom primjeru za funkciju \verb|main|.
 Svakom potprogramu se pridijeli jedinstvena labela koja omogućuje pozivanje tog potprograma instrukcijom \verb|CALL|.
 
-Nakon koda procedura, mogu se rezervirati memorijske lokacije za globalne varijable.
+Nakon koda potprograma, mogu se rezervirati memorijske lokacije za globalne varijable.
 Na primjer, za program u ispisu \ref{lst:primjer_main_x} mogao bi se generirati program sličan onom u ispisu \ref{lst:primjer_main_x_frisc}.
 
 \begin{lstlisting}[caption={Jednostavan \emph{ppjC} program s globalnom varijablom.},label=lst:primjer_main_x]
