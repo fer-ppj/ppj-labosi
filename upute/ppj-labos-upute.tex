@@ -118,7 +118,7 @@ Ako niste sigurni koji programski jezik odabrati, vjerojatno je najsigurniji izb
 Pretpostavka je da iz položenih predmeta na nižim godinama studija svi studenti koji pristupaju laboratorijskim vježbama znaju \emph{C}.
 Ipak, \emph{C} u praksi predmeta nije čest odabir za jezik izgradnje.
 Prvenstveni razlog za to je što je čak i jednostavan jezični procesor relativno složen program koji nužno koristi strukture podataka koje dinamički rastu.
-To pak zahtijeva intenzivno korištenje dinamičke alokacije memorije i pokazivača što može izazvati dosta poteškoća.
+U jeziku \emph{C} to zahtijeva intenzivno korištenje dinamičke alokacije memorije i pokazivača što može izazvati dosta poteškoća.
 Ako vam se čini da bi najbolji izbor za vašu grupu bio \emph{C}, razmislite o korištenju jezika \emph{C++}.
 \emph{C++} podržava više programskih paradigmi te se kao takav može koristiti i u proceduralnom stilu kao \emph{C}, bez primjene objektno orijentirane paradigme.
 Međutim, \emph{C++} u standardnoj biblioteci sadrži većinu struktura podataka koje će vam trebati u izgradnji jezičnog procesora te omogućiti u velikoj mjeri ili potpuno izbjegavanje dinamičke alokacije memorije i rada s pokazivačima.
@@ -146,18 +146,8 @@ Ispitni sustav će pri pokretanju programa na standardni ulaz preusmjeriti odgov
 Iz tog razloga od presudne je važnosti da se vaš program strogo drži formata ispisa zadanog za pojedinu vježbu i da na standardni izlaz ne ispisuje ništa osim onog što se traži.
 Za sav ostali ispis (npr.~ispis grešaka korisniku ili ispis za praćenje rada programa) koristite standardni izlaz za greške (\emph{stderr}).
 
-Zadnji znak u svakoj ulaznoj datoteci bit će znak novog retka i zadnji znak svakog ispisa treba biti znak novog retka.
-Drugim riječima, kada ispisujete očekivani izlaz, nakon sadržaja svakog retka treba staviti znak novog retka.
-Na primjer, pretpostavimo da program tijekom rada u niz (engl. \emph{array}) upiše \texttt{n} cijelih brojeva tipa \texttt{int}, koje treba ispisati jednog po retku.
-Tada bi u jeziku \emph{C} algoritam za ispis izgledao kao u isječku \ref{lst:ispis_algoritam}.
-
-\begin{lstlisting}[caption={Primjer algoritma za ispis.},label=lst:ispis_algoritam]
-for (i=0; i<n; i++) {
-    printf("%d\n", A[i]);
-}
-\end{lstlisting}
-
-Smisao ovog primjera i prethodnog odlomka je da uočite da i nakon zadnjeg broja dolazi znak novog retka.
+Zadnji znak u svakoj ulaznoj datoteci bit će znak novog retka.
+To znači da ako čitate ulaz redak po redak nekom funkcijom koja čuva znakove novog retka (na primjer \texttt{fgets} u \emph{C}-u ili \texttt{readline} u \emph{Pythonu}), možete računati na to da će svaki redak, uključujući i zadnji, završavati znakom novog retka.
 
 Ulazne datoteke će uvijek biti zadane u točno onakvom formatu kao što je opisano u ovom dokumentu, tj.~nije potrebno provjeravati je li ulaz ispravno formatiran i ispisivati greške u suprotnom.
 
