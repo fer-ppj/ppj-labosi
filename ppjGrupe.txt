@@ -143,7 +143,7 @@
 18	00	0036465324	Luka	Bašek	luka.basek@fer.hr
 18	00	0036460146	Marko	Hruška	marko.hruska@fer.hr
 18	00	0036458611	Anita	Martinović	anita.martinovic@fer.hr
-18	00	0036460702	Student nije upisao predmet
+18	00	0036460702	Tomislav	Križan	tomislav.krizan@fer.hr
 18	00	0035168589	Mato	Kovčalija	mato.kovcalija@fer.hr
 
 
@@ -152,7 +152,7 @@
 19	00	0036464605	Jelena	Borotić	jelena.borotic@fer.hr
 19	00	0036463314	Stjepan	Roić	stjepan.roic@fer.hr
 19	00	0023085108	Mirjam	Škarica	mirjam.skarica@fer.hr
-19	00	0036464470	Student nije upisao predmet
+19	00	0036464470	Domagoj	Vukadin	domagoj.vukadin@fer.hr
 19	00	0036460674	Hrvoje	Kozak	hrvoje.kozak@fer.hr
 
 
@@ -161,7 +161,6 @@
 20	00	0036458349	Renato-Zaneto	Lukež	renato-zaneto.lukez@fer.hr
 20	00	0036457411	Irena	Mužar	irena.muzar@fer.hr
 20	00	0036456617	Tomislav	Kreš	tomislav.kres@fer.hr
-20	00	0036456601	Student nije upisao predmet
 20	00	0036461848	Marin	Krmpotić	marin.krmpotic@fer.hr
 
 
@@ -241,7 +240,7 @@
 29	00	1191211871	Ivan	Stipić	ivan.stipic@fer.hr
 
 
-30	01	0119009680	Ana	Milinović	ana.milinovic@fer.hr
+30	01	0119009680	Ana	Milinović	amilinov@dominis.phy.hr
 30	00	0036465782	Jakov	Kaurić	jakov.kauric@fer.hr
 30	00	0036454446	Krešimir	Štimac	kresimir.stimac@fer.hr
 30	00	0036467243	Ines	Andrijević	ines.andrijevic@fer.hr
