@@ -206,7 +206,7 @@ Kako bi se pojednostavio postupak pretvorbe regularnih izraza koji se koriste za
 \itemsep 1pt
 \item izbor podizraza koristeći operator \verb=|=
 \item nadovezivanje (slijedno napisani znakovi ili grupe znakova, bez posebnog operatora)
-\item Kleenove operator ponavljanja \verb=*= (ponavljanje nula ili više puta)
+\item Kleeneov operator ponavljanja \verb=*= (ponavljanje nula ili više puta)
 \item grupiranje koristeći oble zagrade \verb=(= i \verb=)=
 \end{itemize}
 
@@ -833,7 +833,7 @@ Provjera za operator ponavljanja odvojena je jer će se ponoviti nekoliko puta u
 Ponavljanje se prevodi u automat slično kao u točki \emph{p6} u \cite[poglavlje 2.2.2]{utr}.
 Pseudokod je prikazan u ispisu \ref{lst:regex_pseudo_ponavljanje}.
 
-\begin{lstlisting}[caption={Obrada ponavljanja Kleenovim operatorom.},label=lst:regex_pseudo_ponavljanje]
+\begin{lstlisting}[caption={Obrada ponavljanja Kleeneovim operatorom.},label=lst:regex_pseudo_ponavljanje]
 // provjeri ponavljanje
 ako je i+1<duljina(izraz) && izraz[i+1]=='*'
   dodaj_epsilon_prijelaz(automat, trenutno_stanje, sljedece_stanje)
