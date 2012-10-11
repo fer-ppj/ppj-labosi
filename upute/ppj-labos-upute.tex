@@ -249,8 +249,9 @@ Na primjer, definicija stanja leksičkog analizatora može izgledati kao u ispis
 %X S_pocetno S_komentar S_unarniMinus
 \end{lstlisting}
 
-\subsection{Imena leksičkih jedinki}
+\subsection{Imena leksičkih jedinki (uniformni znakovi)}
 Odmah u sljedećem retku nakon definicije stanja leksičkog analizatora, u Ulaznoj Datoteci nalazit će se redak koji definira imena leksičkih jedinki koje generirani leksički analizator treba koristiti.
+U nastavku upute ponekad se umjesto sintagme \emph{ime leksičke jedinke} koristi \emph{uniformni znak} i važno je uočiti da se obje sintagme odnose na istu stvar.
 Redak će započeti znakovima \verb=%L= i točno jednim razmakom, nakon kojeg slijedi niz jednog ili više imena leksičkih jedinki odvojenih točno jednim razmakom (vidi primjer ispod).
 Imena leksičkih jedinki će se sastojati od malih i velikih slova engleske abecede i znakova \verb=_= (engl. \emph{underscore}).
 Na primjer, definicija imena leksičkih jedinki može izgledati kao u ispisu \ref{lst:imena_jedinki}.
@@ -282,12 +283,12 @@ Završetak dijela argumenata akcije bit će jednoznačno određen retkom koji sa
 Argumenti akcije određuju što generirani leksički analizator treba učiniti kada prepozna odgovarajuću leksičku jedinku.
 Svaka akcija imat će jedan do četiri argumenata, svaki u svom retku.
 U prvom retku argumenata akcije uvijek će se nalaziti ime pripadne leksičke jedinke (jedno od imena definiranih ranije u Ulaznoj Datoteci) ili znak \(-\) (minus).
-U slučaju da je u akciji navedeno ime leksičke jedinke, generirani leksički analizator treba zadanu leksičku jedinku dodati u odgovarajuće tablice i u tablice upisati početne vrijednosti za tu leksičku jedinku (ovo je detaljnije objašnjeno u poglavlju \ref{sec:leksicki_analizator} ove upute).
+U slučaju da je u akciji navedeno ime leksičke jedinke, generirani leksički analizator treba zadanu leksičku jedinku dodati u niz uniformnih znakova, kao što je detaljnije objašnjeno u poglavlju \ref{sec:leksicki_analizator} ove upute.
 S druge strane, znak minus označava da pročitani dio ulaznog niza treba odbaciti i da ne predstavlja leksičku jedinku.
 Odbacivanje će se koristiti za izbacivanje komentara, bjelina i slično.
 Pojedine akcije imat će jedan do tri posebna argumenta koji redom omogućuju brojanje redaka, upravljanje stanjem leksičkog analizatora i razrješavanje nejednoznačnosti.
 
-Prvi posebni argument je \verb|NOVI_REDAK| što označava leksičkom analizatoru da je u izvornoj datoteci programa koji se prevodi došlo do promjene retka.
+Prvi posebni argument je \verb|NOVI_REDAK| koji označava leksičkom analizatoru da je u izvornoj datoteci programa koji se prevodi došlo do promjene retka.
 Retci se broje kako bi jezični procesor mogao ispisivati korisne podatke o mjestu pogreške, i tijekom leksičke analize i tijekom ostalih faza rada.
 Povećani broj retka odnosi se tek na sljedeću leksičku jedinku, tj.~ako akcija prepoznaje neku leksičku jedinku (u prvom retku argumenata akcije nalazi se neko ime leksičke jedinke, a ne znak \(-\)) i ima argument \verb|NOVI_REDAK|, za broj retka te leksičke jedinke zapisuje se stari broj retka, prije uvećanja.
 
@@ -295,7 +296,7 @@ Drugi posebni argument je \verb|UDJI_U_STANJE| \emph{imeStanja} kojim leksički 
 Niz znakova \emph{imeStanja} bit će odvojen od niza \verb|UDJI_U_STANJE| točno jednim razmakom.
 Treći posebni argument je \verb|VRATI_SE| \emph{naZnak} koji određuje da se od pročitanih znakova u leksičku jedinku treba grupirati prvih \emph{naZnak} znakova, a ostali znakovi vraćaju se u ulazni niz, kao da nisu ni pročitani (vidi primjer).
 Ova naredba je ekvivalentna naredbi \verb|yyless(naZnak)| u Lexu.
-\emph{naZnak} će biti cijeli broj bez vodećih nula i bit će odvojen od niza \verb|VRATI_SE| točno jednim razmakom.
+\emph{naZnak} će biti dekadski cijeli broj bez vodećih nula i bit će odvojen od niza \verb|VRATI_SE| točno jednim razmakom.
 Svi posebni argumenti prikazani su u primjeru, uz dodatne komentare u savjetima za implementaciju.
 
 \subsection{Specijalni znakovi}\label{sec:specijalni_znakovi}
@@ -363,7 +364,7 @@ Prva akcija prepoznaje početni niz znakova koji označava komentar.
 Za prepoznavanje specijalnog znaka \verb=|= koristi se prefiks \verb|\|.
 Slično, drugo pravilo pronalazi kraj komentara i vraća leksički analizator u početno stanje.
 S obzirom na to da se komentari mogu provlačiti kroz proizvoljan broj redaka, nužno je i unutar stanja za prepoznavanje komentara nastaviti brojati retke.
-Brojanje redaka ostvaruje trećim pravilom.
+Brojanje redaka ostvaruje se trećim pravilom.
 Konačno, u komentaru se može pojaviti mnogo znakova koji inače nisu dozvoljeni van komentara.
 Važno je primijetiti da četvrto pravilo prepoznaje jedan po jedan znak unutar komentara koristeći regularnu definiciju \verb|{sviZnakovi}|.
 Na taj način će biti moguće prepoznati niz znakova koji predstavlja kraj komentara (prioritet po duljini, a i po redoslijedu pravila) i znak kraja retka (prioritet po redoslijedu pravila).
@@ -397,7 +398,7 @@ Između lijevog i desnog znaka može se pojaviti proizvoljan broj bjelina.
 U oba pravila koristi se posebni argument \verb|VRATI_SE| \emph{naZnak}.
 Na primjer, ako leksički analizator u stanju \verb|S_pocetno| pročita niz\\
 \verb|-\t\t \n -|\\
-tada akcija prvog pravila treba prepoznati \emph{samo prvi minus} kao jedinku \verb|OP_MINUS| (zbog \verb|VRATI_SE 1|, što znači da se "glava za čitanje" treba vratiti na znak s indeksom \verb|1| u pročitanom nizu, pri čemu indeksi počinju od \verb|0|).
+tada akcija prvog pravila treba prepoznati \emph{samo prvi minus} kao jedinku \verb|OP_MINUS| (zbog \verb|VRATI_SE 1|, što znači da se ``glava za čitanje'' treba vratiti na znak s indeksom \verb|1| u pročitanom nizu, pri čemu indeksi počinju od \verb|0|).
 Dodatno, leksički analizator treba ući u stanje \verb|S_unarni| i vratiti sve znakove osim prvog minusa u ulazni niz (vidi savjete za implementaciju).
 Bitno je primijetiti da je vraćanje znakova u ulazni niz ključan element ove akcije.
 Na taj način će pravilo za brojanje redaka u stanju \verb|S_unarni| dobiti pročitani znak kraja retka i brojanje redaka će raditi ispravno.
@@ -428,26 +429,22 @@ Način konstruiranja konačnog automata (\(\varepsilon\)-NKA) iz regularnog izra
 Slika \ref{fig:leksicki-analizator} prikazuje dinamiku rada leksičkog analizatora.
 Izvorni kod leksičkog analizatora dobiven primjenom izgrađenog generatora leksičkog analizatora treba prevesti u izvodivi oblik primjenom odgovarajućeg jezičnog procesora (ako je jezik izgradnje interpretirani jezik onda se ovaj korak preskače).
 Izvodivi leksički analizator čita izvorni kod nekog programa pisanog u zadanom izvornom jeziku (na primjer jeziku \emph{C}) \emph{sa standardnog ulaza}.
-Rezultat izvođenja leksičkog analizatora u jezičnom procesoru su \emph{niz uniformnih znakova} i \emph{tablica znakova}.
+Rezultat izvođenja leksičkog analizatora u jezičnom procesoru je \emph{niz uniformnih znakova}\footnote{Na predavanjima i u udžbeniku ste vidjeli da leksički analizator može inicijalizirati tablicu znakova, ali to u ovim laboratorijskim vježbama neće biti potrebno. Tablica znakova će se ostvariti u kasnijim fazama rada kada postaje potrebna.}.
 
 \subsection{Ispis leksičkog analizatora}
 Za potrebe prve laboratorijske vježbe, leksički analizator \emph{na standardni izlaz} treba za svaki element niza uniformnih znakova ispisati redak sljedećeg oblika:\\
 \\
 \emph{uniformniZnak}\textvisiblespace\emph{redakPrograma}\textvisiblespace\emph{leksičkaJedinka}\\
 \\
-Pritom je \emph{uniformniZnak} odgovarajući uniformni znak iz Ulazne datoteke, \emph{redakPrograma} broj retka u ulaznom programu u kojem se leksička jedinka nalazi ako se \textbf{retci broje od 1} i \emph{leksičkaJedinka} je niz znakova ulaznog programa koji su grupirani u leksičku jedinku.
+Pritom je \emph{uniformniZnak} odgovarajući uniformni znak iz Ulazne Datoteke, \emph{redakPrograma} broj retka u ulaznom programu u kojem se leksička jedinka nalazi ako se \textbf{retci broje od 1} i \emph{leksičkaJedinka} je niz znakova ulaznog programa koji su grupirani u leksičku jedinku.
 Ta tri dijela retka međusobno su odvojeni sa po jednim razmakom.
 Primjer izlaza prikazan je u poglavlju \ref{sec:leksicki_analizator_primjer}.
 
 \subsection{Strukture podataka leksičkog analizatora}
 Leksički analizator na ulazu prima programski kod u jeziku opisanom Ulaznom Datotekom.
-Kao rezultat, leksički analizator treba stvoriti niz uniformnih znakova i tablicu znakova (engl. \emph{symbol table}).
-Zbog jednostavnosti Ulazne Datoteke, tablica znakova može biti jedino homogena, odnosno jedna tablica (kako god bila implementirana) sadržavat će na kraju rada leksičkog analizatora sve leksičke jedinke koje se nalaze u ulaznom programu.
-Drugim rječima, Ulazna Datoteka ne omogućuje razvrstavanje simbola u tablicu ključnih riječi, tablicu konstanti i tablicu identifikatora.
+Kao rezultat, leksički analizator treba stvoriti niz uniformnih znakova.
 
-Niz uniformnih znakova mora za svaku prepoznatu leksičku jedinku sadržavati ime leksičke jedinke, redak u kojem se ta jedinka nalazi u ulaznom programu i neku informaciju kako doći do odgovarajućeg zapisa u tablici znakova; to može biti pokazivač, indeks ili nešto treće.
-
-Nakon završetka rada leksičkog analizatora, tablica znakova treba sadržavati točno jedan zapis za svaku leksičku jedinku u ulaznom programu.
+Kako leksički analizator neće graditi tablicu znakova, u nizu uniformnih znakova za svaku prepoznatu leksičku jedinku uz ime leksičke jedinke i redak u kojem se ta jedinka nalazi u ulaznom programu treba se nalaziti i niz znakova ulaznog programa koji su grupirani u leksičku jedinku.
 
 \subsection{Algoritam leksičkog analizatora}
 U udžbeniku su opisana dva algoritma leksičkog analizatora.
@@ -459,7 +456,7 @@ Generirani leksički analizator nejednoznačnost treba rješavati koristeći pra
 
 \subsection{Postupak oporavka od pogreške}
 Za postupak oporavka od pogreše treba koristiti jednostavan postupak odbacivanja prvog znaka iz ulaznog programa kao što je opisano u poglavlju 2.9.5 udžbenika.
-Prijavu pogrešaka obavljati isključivo na izlaz za greške (\emph{stderr}).
+Podatke o pogreški treba ispisivati isključivo na izlaz za greške (\emph{stderr}).
 Dodatno, iako se u ispisu leksičkog analizatora eksplicitno ne navode greške niti nije vidljivo kako se analizator oporavlja od pogreške, ispravnost implementacije ovog postupka utjecat će na ispis za sve ulazne programe koji sadrže barem jednu leksičku pogrešku.
 
 \subsection{Primjer}\label{sec:leksicki_analizator_primjer}
@@ -475,81 +472,53 @@ Kao nastavak prije obrađenog primjera, prikazat ćemo rezultat rada leksičkog 
 \end{lstlisting}
 
 Datoteka s ovim primjerom za potrebe testiranja može se pronaći \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/primjer.minus}{ovdje}.
-Leksički analizator u skladu s ranije opisanom Ulaznom Datotekom generira sljedeći niz uniformnih znakova i tablicu znakova:
+Leksički analizator u skladu s ranije opisanom Ulaznom Datotekom generira sljedeći niz uniformnih znakova:
 
 \begin{table}[ht]
-\begin{minipage}[b]{0.5\linewidth}
 \centering
 \begin{tabular}{|l|c|c|}
 \hline
-uniformni znak&redak&indeks\\
-\hline
-OPERAND&2&0\\
-\hline
-OP\_MINUS&2&1\\
-\hline
-UMINUS&2&2\\
+uniformni znak&redak&grupirani znakovi\\
 \hline
 OPERAND&2&3\\
 \hline
-OP\_MINUS&2&1\\
+OP\_MINUS&2&-\\
 \hline
-LIJEVA\_ZAGRADA&2&4\\
+UMINUS&2&-\\
 \hline
-OPERAND&4&0\\
+OPERAND&2&0x12\\
 \hline
-OP\_MINUS&4&1\\
+OP\_MINUS&2&-\\
 \hline
-UMINUS&4&2\\
+LIJEVA\_ZAGRADA&2&(\\
 \hline
-UMINUS&5&2\\
+OPERAND&4&3\\
 \hline
-UMINUS&5&2\\
+OP\_MINUS&4&-\\
 \hline
-OPERAND&5&5\\
+UMINUS&4&-\\
 \hline
-DESNA\_ZAGRADA&5&6\\
+UMINUS&5&-\\
 \hline
-\end{tabular}
-\end{minipage}
-\hspace{0.5cm}
-\begin{minipage}[b]{0.5\linewidth}
-\centering
-\begin{tabular}{|l|l|l|}
+UMINUS&5&-\\
 \hline
-0&OPERAND&3\\
+OPERAND&5&076\\
 \hline
-1&OP\_MINUS&-\\
-\hline
-2&UMINUS&-\\
-\hline
-3&OPERAND&0x12\\
-\hline
-4&LIJEVA\_ZAGRADA&(\\
-\hline
-5&OPERAND&076\\
-\hline
-6&DESNA\_ZAGRADA&)\\
+DESNA\_ZAGRADA&5&)\\
 \hline
 \end{tabular}
-\end{minipage}
 \end{table}
 
 U drugom stupcu niza uniformnih znakova naveden je redak u kojem se uniformni znak nalazi u ulaznoj datoteci.
-U trećem stupcu naveden je indeks u tablicu znakova.
-
-U ovom primjeru važno je uočiti dvije stvari.
-Prvo, iako se operand \verb|3| u tekstu programa pojavljuje na dva mjesta, u tablici postoji samo jedan (zajednički) zapis jer se radi o dva pojavljivanja iste leksičke jedinke.
-Drugo, iako se zapisi za binarni i unarni minus u tekstu programa ne razlikuju, u tablici znakova postoje zasebni zapisi za binarni i unarni minus zato jer se radi o različitim leksičkim jedinkama.
+U trećem stupcu navedeni su znakovi iz ulaznog programa koji su grupirani u leksičku jedinku.
 
 Očekivani ispis na standardni izlaz prikazan je \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/minus_primjer_izlaz.txt}{ovdje}.
-Treba uočiti da ispis završava praznim retkom tj.~da svi retci (osim tog praznog) završavaju znakom kraja retka.
 
 \section{Način računalnog ocjenjivanja rješenja}
-Za potrebe računalnog ocjenjivanja rješenje prve laboratorijske vježbe treba predati u jednoj \emph{zip} datoteci.
+Za potrebe računalnog ocjenjivanja, rješenje prve laboratorijske vježbe treba predati u jednoj \emph{zip} datoteci.
 U korijenskom direktoriju trebaju se nalaziti \textbf{sve} datoteke s izvornim kodom \textbf{generatora} leksičkog analizatora.
 Korijenski direktorij \emph{zip} datoteke mora sadržavati poddirektorij \texttt{analizator}.
-Poddirektorij \texttt{analizator} može inicijalno sadržavati dijelove implementacije leksičkog analizatora koji ne ovise o Ulaznoj datoteci, ali i ne mora sadržavati ništa.
+Poddirektorij \texttt{analizator} može inicijalno sadržavati dijelove implementacije leksičkog analizatora koji ne ovise o Ulaznoj Datoteci, ali i ne mora sadržavati ništa.
 Na primjer, za rješenje u jeziku \emph{C}, sadržaj \emph{zip} datoteke mogao bi izgledati kao u ispisu \ref{lst:gla_zip_struktura}.
 
 \begin{lstlisting}[caption={Primjer sadržaja \emph{zip} datoteke. Imena datoteka \emph{nisu važna}.},label=lst:gla_zip_struktura]
@@ -612,12 +581,13 @@ generator.exe
 Konačno, izvodivi leksički analizator na standardni ulaz dobiva izvorni kod programa i treba ispisati rezultat izvođenja kao što je ranije opisano.
 
 Uočite da su \textbf{generator} i \textbf{analizator} dva \emph{odvojena programa}.
-Nije dozvoljeno kopirati Ulaznu datoteku u "generatoru" i onda ju ponovno parsirati u "analizatoru", stvarati automate i tek onda analizirati ulazni program.
+Nije dozvoljeno kopirati Ulaznu Datoteku u ``generatoru'' i onda je ponovno parsirati u ``analizatoru'', stvarati automate i tek onda analizirati ulazni program.
 Generator je taj program koji mora završiti definiciju analizatora.
-To se, na primjer, može ostvariti tako da generator generira programski kod koji u analizatoru inicijalizira tablice automata ili da generira datoteku s tablicama automata koju onda analizator čita.
+To se, na primjer, može ostvariti tako da generator generira programski kod koji u analizatoru inicijalizira tablice automata ili da generira datoteku s tablicama automata koju onda analizator čita\footnote{Ova druga opcija ekvivalentna je serijalizaciji/deserijalizaciji što je isto dozvoljeno.}.
 
-Za rješenja u \emph{Javi} i \emph{C\#}-u, ulazna točka u generator \textbf{mora biti} u razredu \texttt{GLA}, a ulazna točka u analizator u razredu \texttt{LA}.
+Za rješenja u \emph{Javi}, ulazna točka u generator \textbf{mora biti} u razredu \texttt{GLA}, a ulazna točka u analizator u razredu \texttt{LA}.
 Za rješenja u \emph{Pythonu}, za izvođenje generatora će se pozvati datoteka \texttt{GLA.py}, a za izvođenje analizatora datoteka \texttt{LA.py}.
+Za rješenja u ostalim jezicima ulazna točka (main funkcija\slash{}metoda) može biti bilo gdje.
 
 Detalji oko predaje, kao što su inačice alata koji će se koristiti za prevođenje i izvođenje rješenja, bit će objavljeni naknadno na FERWebu.
 
@@ -631,7 +601,7 @@ Preporuča se da se taj dio koda zasebno razvije i testira, na primjer koristeć
 Na taj način, generator leksičkog analizatora može razvijeni kod iskopirati u datoteku s izvornim kodom leksičkog analizatora i dopuniti datoteku definicijom tablice konačnog automata i slično.
 
 \subsection{Priprema regularnih izraza za generiranje konačnog automata}
-Prije generiranja \(\varepsilon\)-NKA iz regularnog izraza, potrebno je sve regularne definicije koji se pojavljuju u regularnom izrazu zamijeniti odgovarajućim regularnim izrazima.
+Prije generiranja \(\varepsilon\)-NKA iz regularnog izraza, moguće je sve regularne definicije koji se pojavljuju u regularnom izrazu zamijeniti odgovarajućim regularnim izrazima.
 S obzirom na ograničenja regularnih definicija, svaka regularna definicija će prije njenog referenciranja biti definirana.
 Prema tome, zamjena regularnih definicija se tijekom rada generatora leksičkog analizatora može obaviti algoritmom prikazanim u pseudokodu u ispisu \ref{lst:priprema_regexa}.
 
@@ -644,9 +614,9 @@ za svaku regularnu definiciju {regDef} u Ulaznoj Datoteci
 	regularniIzraz[{regDef}] = regEx
 \end{lstlisting}
 
-Ključno je primijetiti da se koristeći ovaj algoritam svakoj regularnoj definiciji neposredno nakon što je pročitana iz Ulazne Datoteke pridruži "čisti" regularni izraz koji ne referencira niti jednu regularnu definiciju.
+Ključno je primijetiti da se koristeći ovaj algoritam svakoj regularnoj definiciji neposredno nakon što je pročitana iz Ulazne Datoteke pridruži ``čisti'' regularni izraz koji ne referencira niti jednu regularnu definiciju.
 Također, kako bi se očuvala očekivana prednost operatora, nužno je prije zamjene regularni izraz koji opisuje neku regularnu definiciju okružiti zagradama.
-Koristeći vrlo sličan algoritam i "čiste" regularne izraze za regularne definicije, moguće je pripremiti sve regularne izraze iz Ulazne Datoteke za generiranje konačnog automata, tj.~zamijeniti sve reference na regularne definicije odgovarajućim regularnim izrazom.
+Koristeći vrlo sličan algoritam i ``čiste'' regularne izraze za regularne definicije, moguće je pripremiti sve regularne izraze iz Ulazne Datoteke za generiranje konačnog automata, tj.~zamijeniti sve reference na regularne definicije odgovarajućim regularnim izrazom.
 
 Na primjer, neka su zadane sljedeće regularne definicije:\\
 \verb={znamenka} 0|1|2|3|4|5|6|7|8|9=\\
@@ -664,7 +634,7 @@ uvrštavanjem takvog regularnog izraza za definiciju \verb|{hexZnamenka}| dobili
 \verb=0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)=\\
 \verb=((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*=
 
-Ovakav regularni izraz može se prevesti u \(\varepsilon\)-NKA koristeći ranije spomenuti algoritam opisan u udžbeniku "Uvod u teoriju računarstva" \cite[poglavlje 2.2.2]{utr}.
+Ovakav regularni izraz može se prevesti u \(\varepsilon\)-NKA koristeći ranije spomenuti algoritam opisan u udžbeniku ``Uvod u teoriju računarstva'' \cite[poglavlje 2.2.2]{utr}.
 
 \subsection{Izgradnja $\varepsilon$-NKA iz regularnih izraza za potrebe leksičkog analizatora}
 Ako se u obradi referenci na regularne definicije koristi algoritam koji je opisan u prethodnom poglavlju, za regularne izraze definicija nije potrebno graditi konačne automate jer se ti regularni izrazi na tekstualnoj razini umeću u regularne izraze pravila.
@@ -676,16 +646,16 @@ To ograničenje moguće je ostvariti tako da se za svako stanje leksičkog anali
 Postupak izgradnje \(\varepsilon\)-NKA za potrebe leksičkog analizatora opisan je u udžbeniku \cite[poglavlje 2.9.2]{udzbenik}.
 Bitno je primijetiti da je prilikom dodavanja početnog stanja \(p_0\) (vidi udžbenik) i spajanja svih automata \(M_i\) u jedinstveni automat nužno osigurati da sva stanja u automatima \(M_i\) imaju jedinstvene oznake.
 U suprotnom automat vrlo vjerojatno neće raditi ispravno!
-Kako bi se izbjegla potreba za preimenovanjem stanja, moguće je umjesto spajanja automata \(M_i\) u jedinstveni automat za neko stanje leksičkog analizatora automate \(M_i\) pohraniti odvojeno.
+Kako bi se izbjegla potreba za preimenovanjem stanja, moguće je, umjesto spajanja automata \(M_i\) u jedinstveni automat za neko stanje leksičkog analizatora, automate \(M_i\) pohraniti odvojeno.
 Na taj način će svako pravilo pridruženo nekom stanju leksičkog analizatora imati svoj \(\varepsilon\)-NKA.
 Ova promjena utječe na sam algoritam rada leksičkog analizatora opisan u \cite[poglavlje 2.9.7]{udzbenik} jer će leksički analizator umjesto jednog koristiti nekoliko \(\varepsilon\)-NKA.
 
-Izgradnja \(\varepsilon\)-NKA za regularni izraz svakog pravila načelno je opisana u udžbeniku predmeta "Uvod u teoriju računarstva".
+Izgradnja \(\varepsilon\)-NKA za regularni izraz svakog pravila načelno je opisana u udžbeniku predmeta ``Uvod u teoriju računarstva''.
 S obzirom na to da je postupak relativno složen, a nije središnja tema ove laboratorijske vježbe, u nastavku je dan pseudokod koji opisuje jedan način na koji se pretvorba može ostvariti.
 
 Funkciji u pseudokodu predaje se regularni izraz i automat koji treba izgraditi.
 Vizualno, automat se gradi s lijeva na desno pa se imena varijabli naslanjaju na tu predodžbu.
-Funkcija kao rezultat vraća "lijevo" i "desno" stanje automata.
+Funkcija kao rezultat vraća ``lijevo'' i ``desno'' stanje automata.
 Lijevo stanje za cijeli izraz odgovara početnom stanju automata, a desno stanje za cijeli izraz odgovara prihvatljivom stanju automata.
 Algoritam izgradnje \(\varepsilon\)-NKA iz regularnog izraza jamči da će automat imati točno jedno prihvatljivo stanje.
 Poziv algoritma prikazan je u ispisu \ref{lst:regex_pseudo_poziv}.
@@ -906,15 +876,6 @@ Ostvarenje ponavljanja koristi različite varijable u odnosu na prethodna dva sl
 
 Funkcija \verb|pretvori| na kraju vraća vrijednosti varijabli \verb|lijevo_stanje| i \verb|desno_stanje| u strukturi \verb|ParStanja|.
 Cijeli pseudokod u jednoj datoteci može se naći \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/regex_pseudokod.txt}{ovdje}.
-
-\subsection{Ostvarenje tablice znakova}
-Kroz treću laboratorijsku vježbu, zapisi u tablici znakova morat će se proširivati dodatnim podacima.
-Za prvu laboratorijsku vježbu to znači da je poželjno sve pristupe tablici znakova ostvariti kroz pomoćne funkcije ili metode tako da kasnije bude moguće potrebne promjene obaviti na što manjem broju mjesta.
-Dodatno, tablica znakova tijekom kasnijih faza rada jezičnog procesora može i rasti.
-Na primjer, leksička analiza stvara jedan zapis u tablici znakova za svaku pojavu nekog identifikatora "x" u izvornom programu.
-Međutim, ako se spomenuti identifikator pojavljuje u različitim kontekstima (na primjer, negdje se radi o \verb|int|, a negdje o \verb|char| varijabli), bit će nužno u tablicu znakova dodati zapise koji opisuju te različite instance identifikatora jednakog imena.
-
-Alternativno, moguće je u kasnijim fazama rada koristiti više tablica znakova, ali o tome će više riječi biti u trećoj laboratorijskoj vježbi.
 
 \section{Leksička analiza podskupa jezika \emph{C}}
 Koristeći generator leksičkog analizatora potrebno je generirati leksički analizator za zadani podskup jezika \emph{C}.
