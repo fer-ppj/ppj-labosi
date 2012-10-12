@@ -737,11 +737,11 @@ Nastavak algoritma koji započinje izgradnja automata prikazan je u ispisu \ref{
         za (i=0; i<br_elemenata(izbori); i=i+1)
           ParStanja privremeno = pretvori(izbori[i], automat)
           dodaj_epsilon_prijelaz(automat,
-             lijevo_stanje,         
-             privremeno.lijevo_stanje)
+              lijevo_stanje,         
+              privremeno.lijevo_stanje)
           dodaj_epsilon_prijelaz(automat,
-                              privremeno.desno_stanje,
-                              desno_stanje)
+              privremeno.desno_stanje,
+              desno_stanje)
         kraj za
     inace
       ...
@@ -749,27 +749,61 @@ Nastavak algoritma koji započinje izgradnja automata prikazan je u ispisu \ref{
 
 Kao što je prikazano odsječkom u ispisu \ref{lst:regex_pseudo_pretvori_2}, ako su u izrazu pronađeni podizrazi odvojeni operatorom izbora, svaki podizraz se rekurzivno obradi pozivom funkcije \verb|pretvori| i lijeva i desna stanja dobivena od rekurzivnog poziva povežu se epsilon prijelazima s lijevim i desnim stanjem za cijeli izraz.
 Ovaj postupak je poopćenje točke \emph{p4} u \cite[poglavlje 2.2.2]{utr}.
-U ispisu \ref{lst:regex_pseudo_pretvori_3} je opisana obrada drugog slučaja u kojem nisu pronađeni operatori izbora.
+
+Ako u izrazu nije pronađen operator izbora, izraz se sastoji od nadovezivanja jednog ili više podizraza.
+Obrada ovog slučaja opisana je u ispisu \ref{lst:regex_pseudo_pretvori_3}.
 
 \begin{lstlisting}[caption={Obrada nadovezivanja u funkciji \texttt{pretvori}.},label=lst:regex_pseudo_pretvori_3]
       ... // nastavlja se inace iz proslog odsjecka
       bool prefiksirano = laz
-      int trenutno_stanje = lijevo_stanje
+      int zadnje_stanje = lijevo_stanje
       za (i=0; i<duljina(izraz); i=i+1)
+        int a, b
         ako je prefiksirano istina
           *slucaj 1*
         inace
           *slucaj 2*
         kraj ako
+
+        // provjera ponavljanja
+        ako je i+1<duljina(izraz) && izraz[i+1]=='*'
+          int x = a
+          int y = b
+          a = novo_stanje(automat)
+          b = novo_stanje(automat)
+          dodaj_epsilon_prijelaz(automat, a, x)
+          dodaj_epsilon_prijelaz(automat, y, b)
+          dodaj_epsilon_prijelaz(automat, a, b)
+          dodaj_epsilon_prijelaz(automat, y, x)
+          i = i+1
+        kraj ako
+
+        // povezivanje s prethodnim podizrazom
+        dodaj_epsilon_prijelaz(automat, zadnje_stanje, a)
+        zadnje_stanje = b
       kraj za
-      dodaj_epsilon_prijelaz(automat, trenutno_stanje, desno_stanje)
+      dodaj_epsilon_prijelaz(automat, zadnje_stanje, desno_stanje)
 \end{lstlisting}
 
 Varijabla \verb|prefiksirano| služi za prepoznavanje je li trenutni znak u izrazu prefiksiran znakom \verb|\|.
-Varijabla \verb|trenutno_stanje| sadrži broj najdesnijeg stanja u postupku izgradnje automata.
-Kao što je prije spomenuto, postupak kreće s lijeva na desno.
-Na kraju obrade cijelog izraza (zadnja linija pseudokoda), najdesnije generirano stanje povezuje se epsilon prijelazom s desnim stanjem koje će se vratiti na kraju funkcije.
-Pri obradi svakog znaka izraza postoje dva slučaja, ovisno o tome je li znak prefiksiran znakom \verb|\| ili nije.
+Varijabla \verb|zadnje_stanje| sadrži broj najdesnijeg stanja u postupku izgradnje automata.
+Kao što je prije spomenuto, postupak kreće s lijeva na desno, znak po znak.
+Pri obradi znaka postoje dva slučaja, ovisno o tome je li znak prefiksiran ili nije.
+Oba slučaja objašnjena su u nastavku.
+U oba slučaja ćemo izgraditi dio automata za podizraz tako da lijevo stanje dijela automata koji predstavlja taj podizraz bude u varijabli \verb|a|, a desno stanje u varijabli \verb|b|.
+
+Pretpostavimo na trenutak da je podizraz obrađen u jednom od dva slučaja.
+Moguće je da je na podizraz primijenjen Kleeneov operator ponavljanja i to provjeravamo u sljedećem \verb|ako| bloku.
+Ponavljanje se prevodi u automat kao u točki \emph{p6} u \cite[poglavlje 2.2.2]{utr}.
+Kako želimo očuvati invarijantu da su lijevo i desno stanje podizraza u varijablama \verb|a| i \verb|b|, a za obradu ponavljanja trebamo dodati još dva ``vanjska'' stanja, preimenujemo stanja \verb|a| i \verb|b| u \verb|x| i \verb|y| i za \verb|a| i \verb|b| dodamo dva nova stanja u automat.
+Prvi epsilon prijelaz omogućuje ulazak automata u obrađeni podizraz.
+Drugi epsilon prijelaz omogućuje izlazak automata iz obrade podizraza.
+Treći epsilon prijelaz omogućuje preskakanje cijelog podizraza (ponavljanje nula puta), a četvrti epsilon prijelaz omogućuje proizvoljno ponavljanje podizraza.
+Konačno, uvećavamo varijablu \verb|i| jer smo obradili znak \verb|'*'|.
+
+Nakon provjere ponavljanja znamo da je podizraz u potpunosti obrađen i možemo ga povezati s prethodnim podizrazom.
+Kada je cijeli izraz obrađen, tj.~nema više nadovezivanja, dodajemo epsilon prijelaz do prije definiranog desnog stanja cijelog izraza (zadnja linija odsječka).
+
 Pseudokod za \emph{slučaj 1} prikazan je u ispisu \ref{lst:regex_pseudo_slucaj_1}.
 
 \begin{lstlisting}[caption={Slučaj 1 u funkciji \texttt{pretvori}.},label=lst:regex_pseudo_slucaj_1]
@@ -786,35 +820,18 @@ inace
   prijelazni_znak = izraz[i]
 kraj ako
 
-int sljedece_stanje = novo_stanje(automat)
-dodaj_prijelaz(automat, trenutno_stanje, sljedece_stanje, 
-    prijelazni_znak)
-*provjeri ponavljanje*
-trenutno_stanje = sljedece_stanje
+a = novo_stanje(automat)
+b = novo_stanje(automat)
+dodaj_prijelaz(automat, a, b, prijelazni_znak)
 \end{lstlisting}
 
-Odsječak za slučaj 1 prvo postavlja varijablu \verb|prefiksirano| u laž zato jer je prefiks iz prošlog znaka potrošen na znak koji se trenutno obrađuje.
-Ograničenja na Ulaznu Datoteku osiguravaju da će u slučaju 1 \verb|izraz[i]| biti neki od specijalnih znakova opisanih u ovoj uputi u poglavlju \ref{sec:specijalni_znakovi}.
+Odsječak za \emph{slučaj 1} prvo postavlja varijablu \verb|prefiksirano| u laž zato jer je prefiks iz prošlog znaka potrošen na znak koji se trenutno obrađuje.
+Ograničenja na Ulaznu Datoteku osiguravaju da će u \emph{slučaju 1} \verb|izraz[i]| biti neki od specijalnih znakova opisanih u ovoj uputi u poglavlju \ref{sec:specijalni_znakovi}.
 Posebnu pažnju treba posvetiti znakovima za tab, novi redak i prazninu.
-Prijelazni znak u automatu treba biti onaj znak kojeg će leksički analizator pročitati u ulaznom programu.
-Nakon što je određen prijelazni znak, automatu se dodaje novo stanje i odgovarajući prijelaz. 
+Prijelazni znak u automatu treba biti onaj znak koji će leksički analizator pročitati u ulaznom programu.
+U skladu s prethodno definiranom invarijantom, u nastavku generiramo dio automata koji prihvaća pronađeni prijelazni znak između stanja \verb|a| i \verb|b|.
 
-Provjera za operator ponavljanja odvojena je jer će se ponoviti nekoliko puta u cijelom pseudokodu.
-Ponavljanje se prevodi u automat slično kao u točki \emph{p6} u \cite[poglavlje 2.2.2]{utr}.
-Pseudokod je prikazan u ispisu \ref{lst:regex_pseudo_ponavljanje}.
-
-\begin{lstlisting}[caption={Obrada ponavljanja Kleeneovim operatorom.},label=lst:regex_pseudo_ponavljanje]
-// provjeri ponavljanje
-ako je i+1<duljina(izraz) && izraz[i+1]=='*'
-  dodaj_epsilon_prijelaz(automat, trenutno_stanje, sljedece_stanje)
-  dodaj_epsilon_prijelaz(automat, sljedece_stanje, trenutno_stanje)
-  i = i+1
-kraj ako
-\end{lstlisting}
-
-Nakon dodavanja epsilon prijelaza koji obrađuju ponavljanje, znak ponavljanja se preskače pomicanjem indeksa za jedan unaprijed.
-
-Obrada slučaja 2 u kojem znak nije prefiksiran znakom \verb|\| prikazana je u ispisu \ref{lst:regex_pseudo_slucaj_2}.
+Obrada \emph{slučaja 2} u kojem znak nije prefiksiran znakom \verb|\| prikazana je u ispisu \ref{lst:regex_pseudo_slucaj_2}.
 
 \begin{lstlisting}[caption={Slučaj 2 u funkciji \texttt{pretvori}.},label=lst:regex_pseudo_slucaj_2]
 // slucaj 2
@@ -829,57 +846,49 @@ inace
 kraj ako
 \end{lstlisting}
 
-U slučaju 2, prvo se provjerava je li trenutni znak baš znak \verb|\|.
-Ako je, postavlja se varijabla prefiksirano i prelazi se na sljedeći znak.
+U \emph{slučaju 2}, prvo se provjerava je li trenutni znak baš znak \verb|\|.
+Ako je, postavlja se varijabla \verb|prefiksirano| i prelazi se na sljedeći znak.
 U suprotnom, provjerava se je li trenutni znak otvorena zagrada koja započinje neki podizraz.
 Time se slučaj dijeli na dva podslučaja.
-Ako trenutni znak nije otvorena zagrada onda se sigurno radi o nekom znaku kojeg treba nadovezati na dosad izgrađeni automat.
+Ako trenutni znak nije otvorena zagrada onda se sigurno radi o nekom znaku koji treba nadovezati na dosad izgrađeni automat.
 Pseudokod za ovaj slučaj prikazan je u ispisu \ref{lst:regex_pseudo_slucaj_2a}.
 
 \begin{lstlisting}[caption={Slučaj 2a u funkciji \texttt{pretvori}.},label=lst:regex_pseudo_slucaj_2a]
 // slucaj 2a
-int sljedece_stanje = novo_stanje(automat)
+a = novo_stanje(automat)
+b = novo_stanje(automat)
 ako je izraz[i] == '$'
-  dodaj_epsilon_prijelaz(automat, trenutno_stanje, sljedece_stanje)
+    dodaj_epsilon_prijelaz(automat, a, b)
 inace
-  dodaj_prijelaz(automat, trenutno_stanje, sljedece_stanje, izraz[i])
+    dodaj_prijelaz(automat, a, b, izraz[i])
 kraj ako
-*provjeri ponavljanje*
-trenutno_stanje = sljedece_stanje
 \end{lstlisting}
 
 Posebna pažnja pridaje se znaku \verb|$| koji označava prazan niz.
-Dodatno, nakon obrade znaka provjerava se postoji li nakon znaka operator ponavljanja.
+Kao i u \emph{slučaju 1}, generiramo dio automata koji prihvaća zadani znak između stanja \verb|a| i \verb|b|
 
-Konačno, slučaj 2b pokriva mogućnost podizraza ograđenog zagradama.
+Konačno, \emph{slučaj 2b} pokriva mogućnost podizraza ograđenog zagradama.
 Pseudokod za ovaj slučaj prikazan je u ispisu \ref{lst:regex_pseudo_slucaj_2b}.
 
 \begin{lstlisting}[caption={Slučaj 2b u funkciji \texttt{pretvori}.},label=lst:regex_pseudo_slucaj_2b]
 // slucaj 2b
 int j = *pronadji odgovarajucu zatvorenu zagradu*
 ParStanja privremeno = pretvori(izraz[i+1..j-1], automat)
-dodaj_epsilon_prijelaz(automat, trenutno_stanje,
-    privremeno.lijevo_stanje)
+a = privremeno.lijevo_stanje
+b = privremeno.desno_stanje
 i = j
-trenutno_stanje = privremeno.desno_stanje
-ako je i+1<duljina(izraz) && izraz[i+1]=='*'
-  dodaj_epsilon_prijelaz(automat, privremeno.lijevo_stanje, privremeno.desno_stanje)
-  dodaj_epsilon_prijelaz(automat, privremeno.desno_stanje, privremeno.lijevo_stanje)
-  i = i+1
-kraj ako
 \end{lstlisting}
 
 Traženje odgovarajuće zatvorene zagrade može se obaviti brojeći zagrade na vrlo sličan način kao na početku funkcije pretvori pa ovdje neće biti opisano.
-Kada je pronađena zatvarajuća zagrada, izraz u zagradi rekurzivno se obradi i poveže s trenutno najdesnijim stanjem epsilon prijelazom.
-Konačno, provjeri se postoji li operator ponavljanja.
-Ostvarenje ponavljanja koristi različite varijable u odnosu na prethodna dva slučaja pa je ovdje posebno navedeno da se izbjegne zabuna.
+Kada je pronađena zatvarajuća zagrada, izraz u zagradi rekurzivno se obradi i lijevo i desno stanje automata za podizraz pridruži se varijablama \verb|a| i \verb|b|.
+Nadalje, kako su svi znakovi do \verb|j| obrađeni, varijablu \verb|i| pomičemo na odgovarajuće mjesto.
 
 Funkcija \verb|pretvori| na kraju vraća vrijednosti varijabli \verb|lijevo_stanje| i \verb|desno_stanje| u strukturi \verb|ParStanja|.
 Cijeli pseudokod u jednoj datoteci može se naći \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/regex_pseudokod.txt}{ovdje}.
 
 \section{Leksička analiza podskupa jezika \emph{C}}
 Koristeći generator leksičkog analizatora potrebno je generirati leksički analizator za zadani podskup jezika \emph{C}.
-Ulazna Datoteka koja definira taj leksički analizator može se naći \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/simplePpjLang.lan}{ovdje}.
+Ulazna Datoteka koja definira taj leksički analizator može se naći \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab1/simplePpjLang.lan}{ovdje}\footnote{Ova datoteka će se tijekom semestra mijenjati, ali sada može poslužiti za testiranje prve laboratorijske vježbe.}.
 Generirani leksički analizator će prepoznati ključne riječi jezika \emph{C} navedene u tablici \ref{tab:kljucne_rijeci}.
 
 \begin{table}[ht]
@@ -923,7 +932,7 @@ Očekivani izlaz za dani primjer prikazan je \href{https://github.com/fer-ppj/pp
 Tema druge laboratorijske vježbe je sintaksna analiza.
 Grupe izrađuju generator sintaksnog analizatora po uzoru na program Yacc, ali u bitno pojednostavljenom obliku.
 Generirani sintaksni analizator za parser će koristiti LR(1) kanonski parser opisan u udžbeniku od stranice 147.
-Iako se u praksi zbog velikog broja stanja LR(1) parsera često preferira korištenje LALR parsera, kanonski LR(1) parser odabran je s ciljem pojednostavljenja generatora kojeg treba izgraditi.
+Iako se u praksi zbog velikog broja stanja LR(1) parsera često preferira korištenje LALR parsera, kanonski LR(1) parser odabran je s ciljem pojednostavljenja generatora koji treba izgraditi.
 U nastavku je opisano kako generator sintaksnog analizatora i generirani sintaksni analizator trebaju raditi i dani su neki savjeti za implementaciju.
 Ova uputa pretpostavlja da je čitatelj upoznat sa ispredavanim gradivom o sintaksnoj analizi.
 
@@ -939,7 +948,7 @@ Ova uputa pretpostavlja da je čitatelj upoznat sa ispredavanim gradivom o sinta
 \end{figure}
 
 Način rada generatora sintaksnog analizatora analogan je načinu rada generatora leksičkog analizatora iz prve vježbe i prikazan je na slici \ref{fig:generator-sintaksnog-analizatora}.
-Generator sintaksnog analizatora kojeg je potrebno ostvariti treba prihvaćati opis procesa sintaksnog analizatora zadan tekstualnom datotekom (dalje Ulazna Datoteka).
+Generator sintaksnog analizatora koji je potrebno ostvariti treba prihvaćati opis procesa sintaksnog analizatora zadan tekstualnom datotekom (dalje Ulazna Datoteka).
 Rezultat izvođenja generatora treba biti sintaksni analizator, slično kao u prvoj vježbi.
 U praksi generatori sintaksnih analizatora kao izlaz daju izvorni kod sintaksnog analizatora, ali kao i u prvoj vježbi, dozvolit ćemo da generator analizatoru potrebne podatke predaje putem datoteke ili na neki sličan način.
 Ulazna Datoteka bit će zadana u sljedećem formatu: 

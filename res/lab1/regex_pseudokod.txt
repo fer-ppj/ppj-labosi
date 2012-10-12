@@ -28,15 +28,16 @@ ParStanja pretvori(izraz, automat)
     int lijevo_stanje = novo_stanje(automat)
 	int desno_stanje = novo_stanje(automat)
 	ako je pronađen barem jedan operator izbora
-	  za (i=0; i<br_elemenata(izbori); i=i+1)
-	    ParStanja privremeno = pretvori(izbori[i], automat)
-	    dodaj_epsilon_prijelaz(automat, lijevo_stanje, privremeno.lijevo_stanje)
-	    dodaj_epsilon_prijelaz(automat, privremeno.desno_stanje, desno_stanje)
-	  kraj za
+	    za (i=0; i<br_elemenata(izbori); i=i+1)
+	        ParStanja privremeno = pretvori(izbori[i], automat)
+	        dodaj_epsilon_prijelaz(automat, lijevo_stanje, privremeno.lijevo_stanje)
+	        dodaj_epsilon_prijelaz(automat, privremeno.desno_stanje, desno_stanje)
+	    kraj za
 	inače
         bool prefiksirano = laž
-        int trenutno_stanje = lijevo_stanje
+        int zadnje_stanje = lijevo_stanje
 	    za (i=0; i<duljina(izraz); i=i+1)
+            int a, b
 	        ako je prefiksirano istina
                 // slučaj 1
                 prefiksirano = laž
@@ -51,17 +52,9 @@ ParStanja pretvori(izraz, automat)
                     prijelazni_znak = izraz[i]
                 kraj ako
                 
-                int sljedece_stanje = novo_stanje(automat)
-                dodaj_prijelaz(automat, trenutno_stanje, sljedece_stanje, prijelazni_znak)
-
-                // provjeri ponavljanje
-                ako je i+1<duljina(izraz) && izraz[i+1]==’*’
-                    dodaj_epsilon_prijelaz(automat, trenutno_stanje, sljedece_stanje)
-                    dodaj_epsilon_prijelaz(automat, sljedece_stanje, trenutno_stanje)
-                    i = i+1
-                kraj ako
-                
-                trenutno_stanje = sljedece_stanje
+                a = novo_stanje(automat)
+                b = novo_stanje(automat)
+                dodaj_prijelaz(automat, a, b, prijelazni_znak)
 	        inače
                 // slučaj 2
                 ako je izraz[i] == ‘\\’
@@ -70,38 +63,41 @@ ParStanja pretvori(izraz, automat)
                 kraj ako
                 ako je izraz[i] != ‘(‘
                     // slučaj 2a
-                    int sljedece_stanje = novo_stanje(automat)
+                    a = novo_stanje(automat)
+                    b = novo_stanje(automat)
                     ako je izraz[i] == ‘$’
-                        dodaj_epsilon_prijelaz(automat, trenutno_stanje, sljedece_stanje)
+                        dodaj_epsilon_prijelaz(automat, a, b)
                     inače
-                        dodaj_prijelaz(automat, trenutno_stanje, sljedece_stanje, izraz[i])
+                        dodaj_prijelaz(automat, a, b, izraz[i])
                     kraj ako
-
-                    // provjeri ponavljanje
-                    ako je i+1<duljina(izraz) && izraz[i+1]==’*’
-                        dodaj_epsilon_prijelaz(automat, trenutno_stanje, sljedece_stanje)
-                        dodaj_epsilon_prijelaz(automat, sljedece_stanje, trenutno_stanje)
-                        i = i+1
-                    kraj ako
-
-                    trenutno_stanje = sljedece_stanje
                 inače
                     // slučaj 2b
                     int j = *pronađi odgovarajuću zatvorenu zagradu*
                     ParStanja privremeno = pretvori(izraz[i+1..j-1], automat)
-                    dodaj_epsilon_prijelaz(automat, trenutno_stanje, privremeno.lijevo_stanje)
+                    a = privremeno.lijevo_stanje
+                    b = privremeno.desno_stanje
                     i = j
-                    trenutno_stanje = privremeno.desno_stanje
-                    ako je i+1<duljina(izraz) && izraz[i+1]==’*’
-                        dodaj_epsilon_prijelaz(automat, privremeno.lijevo_stanje, privremeno.desno_stanje)
-                        dodaj_epsilon_prijelaz(automat, privremeno.desno_stanje, privremeno.lijevo_stanje)
-                        i = i+1
-                    kraj ako
                 kraj ako
 	        kraj ako
+
+            // provjera ponavljanja
+            ako je i+1<duljina(izraz) && izraz[i+1]=='*'
+                int x = a
+                int y = b
+                a = novo_stanje(automat)
+                b = novo_stanje(automat)
+                dodaj_epsilon_prijelaz(automat, a, x)
+                dodaj_epsilon_prijelaz(automat, y, b)
+                dodaj_epsilon_prijelaz(automat, a, b)
+                dodaj_epsilon_prijelaz(automat, y, x)
+                i = i+1
+            kraj ako
+
+            // povezivanje s ostatkom automata
+            dodaj_epsilon_prijelaz(automat, zadnje_stanje, a)
+            zadnje_stanje = b
 	    kraj za
-        dodaj_epsilon_prijelaz(automat, trenutno_stanje, desno_stanje)
+        dodaj_epsilon_prijelaz(automat, zadnje_stanje, desno_stanje)
     kraj ako
     
     vrati par lijevo_stanje, desno_stanje
-
