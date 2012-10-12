@@ -202,6 +202,7 @@
 25	00	0036468919	Nikola	Jazvec	nikola.jazvec@fer.hr
 25	00	0036469435	Andrej	Jurić	andrej.juric@fer.hr
 25	00	0036447707	Alen	Živolić	alen.zivolic@fer.hr
+25	00	0036460242	Azzaro	Mujić	azzaro.mujic@fer.hr
 
 
 26	01	0036461068	Damir	Ciganović-Janković	damir.ciganovic-jankovic@fer.hr
