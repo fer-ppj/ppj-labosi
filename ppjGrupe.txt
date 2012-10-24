@@ -199,7 +199,7 @@
 25	01	0036461827	Dinko	Osrečki	dinko.osrecki@fer.hr
 25	00	0036464075	Mateo	Červar	mateo.cervar@fer.hr
 25	00	0036463377	Marija	Hlobik	marija.hlobik@fer.hr
-25	00	0036468919	Nikola	Jazvec	nikola.jazvec@fer.hr
+25	00	0036468305 	Tomislav	Stanić	tomislav.stanic@fer.hr
 25	00	0036469435	Andrej	Jurić	andrej.juric@fer.hr
 25	00	0036447707	Alen	Živolić	alen.zivolic@fer.hr
 25	00	0036460242	Azzaro	Mujić	azzaro.mujic@fer.hr
