@@ -936,7 +936,7 @@ Iako se u praksi zbog velikog broja stanja LR(1) parsera često preferira koriš
 U nastavku je opisano kako generator sintaksnog analizatora i generirani sintaksni analizator trebaju raditi i dani su neki savjeti za implementaciju.
 Ova uputa pretpostavlja da je čitatelj upoznat sa ispredavanim gradivom o sintaksnoj analizi.
 
-\emph{Napomena}: ova vježba potpuno je neovisna od prve vježbe i možete ju raditi i ako niste uspjeli završiti prvu vježbu.
+\emph{Napomena}: ova vježba potpuno je neovisna od prve vježbe i možete je raditi i ako niste uspjeli završiti prvu vježbu.
 
 \section{Generator sintaksnog analizatora}
 
@@ -1106,7 +1106,7 @@ S tim ciljem, na stogu simulatora LR parsera trebaju se nalaziti čvorovi genera
 Prilikom provođenja akcije {\em Pomakni}, simulator gradi novi list generativnog stabla i označava ga u skladu s ranijim opisom.
 Prilikom provođenja akcije {\em Reduciraj}, simulator gradi novi unutrašnji čvor stabla i čvorove sa stoga koji odgovaraju uzorku za zamjenu povezuje kao djecu novog unutrašnjeg čvora.
 U skladu s pravilima rada simulatora LR parsera, uzorak za zamjenu uklanja se sa stoga i zamjenjuje se znakom lijeve strane produkcije uz pripadno stanje i čvor stabla.
-Slijedeći ovaj postupak, prilikom izvođenja akcije {\em Prihvati}, na stogu simulatora nalazit će se korjen generativnog stabla označen početnim nezavršnim znakom gramatike.
+Slijedeći ovaj postupak, prilikom izvođenja akcije {\em Prihvati}, na stogu simulatora nalazit će se korijen generativnog stabla označen početnim nezavršnim znakom gramatike.
 
 \subsection{Ispis generativnog stabla}\label{sec:syn_ispis}
 U ovoj laboratorijskoj vježbi, sintaksni analizator na standardni izlaz treba ispisati konstruirano generativno stablo.
@@ -1132,7 +1132,7 @@ pročitani uniformni znak iz niza uniformnih znakova i odgovarajući znakovni pr
 
 Nakon ispisa pogreške, simulator treba preskočiti sve znakove u nizu uniformnih znakova do prvog sljedećeg sinkronizacijskog znaka.
 Sinkronizacijski znakovi za gramatiku definirani su u Ulaznoj Datoteci.
-Kada je pronašao prvi sljedeći sinkronizacijski znak, simulator sa stoga odbacuje stanja (i pripadne podatke i čvorove stabla) dok ne dođe do nekog stanja s u kojem je definirana $Akcija[s, sinkronizacijski\_znak]$.
+Kada je pronašao prvi sljedeći sinkronizacijski znak, simulator sa stoga odbacuje stanja (i pripadne podatke i čvorove stabla) dok ne dođe do nekog stanja \(s\) u kojem je definirana \(Akcija[s, sinkronizacijski\_znak]\).
 Nakon toga simulator nastavlja s normalnim radom\footnote{Ovaj postupak oporavka od pogreške vrlo je jednostavan, ali očito daje i vrlo slabe rezultate, tj.~za veliku većinu sintaksnih pogrešaka oporavak neće biti osobito uspješan.}.
 
 \section{Primjeri}
@@ -1150,7 +1150,6 @@ Znak \texttt{S} je u toj gramatici služio kao ``novi početni nezavršni znak''
  b
 <A>
  $
-
 \end{lstlisting}
 
 Sinkronizacijski znak je ovdje arbitrarno postavljen na \verb|b|, ali na ovom primjeru nećemo promatrati oporavak od pogreške.
@@ -1165,7 +1164,6 @@ b 2 y y
 a 3 xx xx
 a 4 xx xx xx
 b 4 y
-
 \end{lstlisting}
 
 Ispis sintaksnog analizatora za dani primjer prikazan je u ispisu \ref{lst:ispis_148}.
@@ -1186,7 +1184,6 @@ Ispis prikazuje stvoreno generativno stablo u skladu s opisom u poglavlju \ref{s
      b 4 y
   <A>
    $
-
 \end{lstlisting}
 
 Primjer Ulazne Datoteke generatora za podskup jezika C nalazi se \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab2/simplePpjLang.san}{ovdje}\footnote{Za ovaj primjer generator generira \(\varepsilon\)-NKA s 3115 stanja i 6343 prijelaza iz čega nastaje DKA sa 691 stanja i 5404 prijelaza uz jedno \emph{Pomakni/Reduciraj} proturječje vezano uz \texttt{else} dio naredbe grananja.}.
@@ -1195,7 +1192,6 @@ U ispisu \ref{lst:primjer_C_err} prikazan je ``C program'' sa sintaksnom pogreš
 \begin{lstlisting}[caption={Jednostavan C program sa sintaksnom greškom.},label=lst:primjer_C_err]
 int x = 3 &;
 int y = 2;
-
 \end{lstlisting}
 
 Za prikazani program, sintaksni analizator bi na standardni ulaz dobio ulaz prikazan u nastavku.
@@ -1212,7 +1208,6 @@ IDN 2 y
 OP_PRIDRUZI 2 =
 BROJ 2 2
 TOCKAZAREZ 2 ;
-
 \end{lstlisting}
 
 Do sintaksne greške ovdje dolazi kada analizator čita uniformni znak \verb|TOCKAZAREZ| koji odgovara znaku \verb|;| iz prvog retka programa\footnote{Ponovno, izvorni kod je ovdje prikazan samo kako bi bilo lakse pratiti primjer --- niti jedan program u ovoj vježbi neće dobiti taj izvorni kod, već će sintaksni analizator izravno dobiti niz uniformnih znakova iz ispisa \ref{lst:primjer_C_err_ulaz}}.
@@ -1253,7 +1248,7 @@ Nakon prevođenja i izvođenja generatora, u poddirektoriju \texttt{analizator} 
 
 Ulazna točka u generator za Javu treba biti u razredu \texttt{GSA}, a ulazna točka u analizator u razredu \texttt{SA}.
 Za Python, ulazna točka u generator će biti datoteka \texttt{GSA.py}, a ulazna točka u analizator datoteka \texttt{SA.py}.
-Za ostale jezike (uključujući C\#), imena datoteka su proizvoljna.
+Za ostale jezike, imena datoteka su proizvoljna.
 
 \emph{Napomena:} predano rješenje za drugu vježbu ni na koji način ne ovisi o prvoj vježbi. Ulaz u sintaksni analizator u ovoj vježbi je niz uniformnih znakova u skladu s prethodnim opisom i nigdje u ovoj vježbi ne baratamo s izvornim kodom programa. Zato nemojte spajati leksički analizator s rješenjem ove vježbe i očekivati izvorni kod na ulazu.
 
