@@ -1379,7 +1379,7 @@ Nadalje, znak dvostrukog navodnika se može pojaviti neprefiksiran (dakle \verb|
 
 Konstantni znakovni nizovi (uniformni znak \verb|NIZ_ZNAKOVA|) su tipa \emph{niz}(\emph{const}(\verb|char|)) i implicitno završavaju znakom \verb|'\0'| (kao u \emph{C}-u).
 Ispravni konstantni znakovini nizovi počinju i završavaju dvostrukim navodnikom (ovo je osigurano leksičkom analizom), i mogu sadržavati sve ispisive ASCII znakove, a znakom \verb|\| mogu biti prefiksirani samo znakovi koji su navedeni u prethodnom odlomku.
-Slično kao za znakovne konstante, leksička analiza će propustiti neke konstantne znakovne nizove koji nisu ispravni, npr.~nizove \verb|"\"| i \verb|"\x"|.
+Slično kao za znakovne konstante, leksička analiza će propustiti neke konstantne znakovne nizove koji nisu ispravni, npr.~nizove \verb|"\"| i \verb|"\x"|.\footnote{Zbog ovog propuštanja neispravnih nizova, pod određenim uvjetima nije moguće koristiti veći broj konstantnih znakovnih nizova u istom retku, ali s tim se nećemo zamarati.}
 
 \subsection{Djelokrug deklaracija i životni vijek varijabli}
 Jezik \emph{ppjC} po klasifikaciji iz udžbenika koristi \emph{statičko pravilo djelokruga bez ugniježđenih procedura} \cite[str.~223--224]{udzbenik}, ali podržava ugniježđene blokove, isto kao \emph{C}.
@@ -1636,7 +1636,7 @@ Semantička pravila jezika definirana su u nastavku prirodnim jezikom i uz pomo�
 Sve produkcije gramatike u BNF obliku nalaze se \href{https://github.com/fer-ppj/ppj-labosi/raw/master/res/lab3/bnf.txt}{ovdje}.
 Važno je razumjeti gramatiku ovog jezika jer se semantička analiza provodi nad generativnim stablom čiji oblik izravno ovisi o gramatici.
 Preporučljivo je prije čitanja semantičkih pravila pogledati produkcije gramatike i razmisliti o ulogama pojedinih znakova i produkcija.
-Gramatika se sastoji od tri skupine produkcija: produkcije za izraze, produkcije za naredbenu struktura podataka i produkcije za deklaraciju i definiciju varijabli i funkcija.
+Gramatika se sastoji od tri skupine produkcija: produkcije za izraze, produkcije za naredbenu struktura programa i produkcije za deklaraciju i definiciju varijabli i funkcija.
 Opisa semantičkih pravila u nastavku prati ovu strukturu.
 
 \subsection{Razlika između semantičke pogreške i \emph{nedefiniranog ponašanja}}\label{sec:UB}
@@ -1649,7 +1649,7 @@ Međutim, pojednostavljeno rečeno, ako pokazivači ne pokazuju u isti niz, \emp
 
 Drugi sličan primjer je dereferenciranje \emph{null} pokazivača.
 U mnogim slučajevima kompilator ne može provjeriti hoće li neki pokazivač imati vrijednost \emph{null} pokazivača tijekom izvođenja programa i samim time tijekom prevođenja ne može upozoriti programera da će se to dogoditi.
-Međutim, ako tijekom rada programa dođe do referenciranja \emph{null} pokazivača, ponašanje programa postaje nedefinirano sa stanovišta \emph{C} standarda.
+Međutim, ako tijekom rada programa dođe do referenciranja \emph{null} pokazivača, ponašanje programa postaje nedefinirano s aspekta \emph{C} standarda.
 
 To što je ponašanje programa u nekom slučaju nedefinirano u kontekstu izrade kompilatora znači da se o tim slučajevima ne treba posebno razmišljati (barem u okviru ove vježbe) --- tijekom izvođenja prevedenog programa, može se dogoditi bilo što, uključujući i prestanak rada kompilatora, tj.~u kontekstu ove vježbe, semantičkog analizatora.
 Posljedica ove činjenice je da vaša rješenja nećemo testirati sa generativnim stablima programa koji sadrže jezične konstrukte nedefiniranog ponašanja.
