@@ -1,44 +1,44 @@
 int novo_stanje(automat)
-	automat.br_stanja = automat.br_stanja + 1
-	vrati automat.br_stanja - 1
+    automat.br_stanja = automat.br_stanja + 1
+    vrati automat.br_stanja - 1
 
 bool je_operator(izraz, i)
-	int br = 0
-	dok je i-1>=0 && izraz[i-1]==’\\’ // ovo je jedan \, kao u Cu
-		br = br + 1
-		i = i - 1
-	kraj dok
-	vrati br%2 == 0
+    int br = 0
+    dok je i-1>=0 && izraz[i-1]==’\\’ // ovo je jedan \, kao u Cu
+        br = br + 1
+        i = i - 1
+    kraj dok
+    vrati br%2 == 0
 
 ParStanja pretvori(izraz, automat)
-	niz izbori
-	int br_zagrada = 0
-	za (i=0; i<duljina(izraz); i=i+1)
-		ako je izraz[i]==’(‘ && je_operator(izraz, i)
-			br_zagrada = br_zagrada + 1
-		inače ako je izraz[i]==’)’ && je_operator(izraz, i)
-			br_zagrada = br_zagrada - 1
-		inače ako je br_zagrada==0 && izraz[i]==’|’ && je_operator(izraz, i)
-			grupiraj lijevi negrupirani dio niza znakova izraz u niz izbori
-		kraj ako
-	kraj za
-	ako je pronađen barem jedan operator izbora
-		grupiraj preostali negrupirani dio niza znakova izraz u niz izbori
+    niz izbori
+    int br_zagrada = 0
+    za (i=0; i<duljina(izraz); i=i+1)
+        ako je izraz[i]==’(‘ && je_operator(izraz, i)
+            br_zagrada = br_zagrada + 1
+        inače ako je izraz[i]==’)’ && je_operator(izraz, i)
+            br_zagrada = br_zagrada - 1
+        inače ako je br_zagrada==0 && izraz[i]==’|’ && je_operator(izraz, i)
+            grupiraj lijevi negrupirani dio niza znakova izraz u niz izbori
+        kraj ako
+    kraj za
+    ako je pronađen barem jedan operator izbora
+        grupiraj preostali negrupirani dio niza znakova izraz u niz izbori
 
     int lijevo_stanje = novo_stanje(automat)
-	int desno_stanje = novo_stanje(automat)
-	ako je pronađen barem jedan operator izbora
-	    za (i=0; i<br_elemenata(izbori); i=i+1)
-	        ParStanja privremeno = pretvori(izbori[i], automat)
-	        dodaj_epsilon_prijelaz(automat, lijevo_stanje, privremeno.lijevo_stanje)
-	        dodaj_epsilon_prijelaz(automat, privremeno.desno_stanje, desno_stanje)
-	    kraj za
-	inače
+    int desno_stanje = novo_stanje(automat)
+    ako je pronađen barem jedan operator izbora
+        za (i=0; i<br_elemenata(izbori); i=i+1)
+            ParStanja privremeno = pretvori(izbori[i], automat)
+            dodaj_epsilon_prijelaz(automat, lijevo_stanje, privremeno.lijevo_stanje)
+            dodaj_epsilon_prijelaz(automat, privremeno.desno_stanje, desno_stanje)
+        kraj za
+    inače
         bool prefiksirano = laž
         int zadnje_stanje = lijevo_stanje
-	    za (i=0; i<duljina(izraz); i=i+1)
+        za (i=0; i<duljina(izraz); i=i+1)
             int a, b
-	        ako je prefiksirano istina
+            ako je prefiksirano istina
                 // slučaj 1
                 prefiksirano = laž
                 char prijelazni_znak
@@ -51,11 +51,11 @@ ParStanja pretvori(izraz, automat)
                 inače
                     prijelazni_znak = izraz[i]
                 kraj ako
-                
+
                 a = novo_stanje(automat)
                 b = novo_stanje(automat)
                 dodaj_prijelaz(automat, a, b, prijelazni_znak)
-	        inače
+            inače
                 // slučaj 2
                 ako je izraz[i] == ‘\\’
                     prefiksirano = istina
@@ -78,7 +78,7 @@ ParStanja pretvori(izraz, automat)
                     b = privremeno.desno_stanje
                     i = j
                 kraj ako
-	        kraj ako
+            kraj ako
 
             // provjera ponavljanja
             ako je i+1<duljina(izraz) && izraz[i+1]=='*'
@@ -96,8 +96,8 @@ ParStanja pretvori(izraz, automat)
             // povezivanje s ostatkom automata
             dodaj_epsilon_prijelaz(automat, zadnje_stanje, a)
             zadnje_stanje = b
-	    kraj za
+        kraj za
         dodaj_epsilon_prijelaz(automat, zadnje_stanje, desno_stanje)
     kraj ako
-    
+
     vrati par lijevo_stanje, desno_stanje
